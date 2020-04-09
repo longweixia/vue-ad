@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/home/Home'
+import Home1 from '@/views/home/Home1'
+import ArticleContent from '@/views/home/ArticleContent'
 import GroupChart from '@/views/GroupChart/GroupChart'
 import Login from '@/views/login/Login'
 import WriteBaseInfo from '@/views/resume/WriteBaseInfo'
@@ -22,15 +23,21 @@ import ClubContent from '@/views/club/Content'
 Vue.use(Router)
 
 export default new Router({
-    routes: [{
+    routes: [
+        {
             path: '/',
-            name: 'home',
-            component: Home
+            name: 'home1',
+            component: Home1
         },
         {
-            path: '/home',
-            name: 'home',
-            component: Home
+            path: '/home1',
+            name: 'home1',
+            component: Home1
+        },
+        {
+            path: '/articleContent',
+            name: 'ArticleContent',
+            component: ArticleContent
         },
         {
             path: '/login',
