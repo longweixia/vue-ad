@@ -20,6 +20,7 @@ import Vuelazyload from 'vue-lazyload'
 //     connection: 'http://localhost:3000' //地址+端口，由后端提供
 // }));
 // 将axios挂载到vue原型链上
+Vue.prototype.baseUrl = process.env.API_ROOT//接口的基础url
 Vue.prototype.axios = axios
 
 Vue.use(iView);

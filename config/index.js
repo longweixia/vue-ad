@@ -12,32 +12,37 @@ module.exports = {
     proxyTable: {
       // /users/**表示有三级路由
       // 注意，如果新建的代理，调用接口报404，可以npm run dev后再调用
-      '/users/**':{
-        target:'http://localhost:3000'
-      },
-      '/resumes/**':{
-        target:'http://localhost:3000'
-      },
-      '/resumeTemplates/**':{
-        target:'http://localhost:3000'
-      },
-      '/malls/**':{
-        target:'http://localhost:3000'
-      },
-      '/collections/**':{
-        target:'http://localhost:3000'
-      },
-      '/clubs/**':{
-        target:'http://localhost:3000'
-      },
-      '/articles/**':{
-        target:'http://localhost:3001'
+      '/api':{
+        target:'http://localhost:3001', //接口以api开头就会进行接口代理
+        changeOrigin:true,
+        pathRewrite:{
+          "^/api":"/"
+        }
       }
+      // ,
+      // '/resumes/**':{
+      //   target:'http://localhost:3001'
+      // },
+      // '/resumeTemplates/**':{
+      //   target:'http://localhost:3001'
+      // },
+      // '/malls/**':{
+      //   target:'http://localhost:3001'
+      // },
+      // '/collections/**':{
+      //   target:'http://localhost:3001'
+      // },
+      // '/clubs/**':{
+      //   target:'http://localhost:3001'
+      // },
+      // '/articles/**':{
+      //   target:'http://localhost:3001'
+      // }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8082, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

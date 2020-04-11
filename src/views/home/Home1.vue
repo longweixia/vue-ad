@@ -112,8 +112,9 @@ export default {
       this.getArticle(name)
     },
     getArticle(flag) {
+      console.log(this.baseUrl,9898989)
       this.axios
-        .get("articles/get", {
+        .get(`${this.baseUrl}/articles/get`, {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,

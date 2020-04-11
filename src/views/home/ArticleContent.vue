@@ -100,7 +100,7 @@ export default {
   methods: {
     getArticle(index, types, idIndex) {
       this.axios
-        .get("articles/get", {
+        .get(`${this.baseUrl}/articles/get`, {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
@@ -126,7 +126,7 @@ export default {
       article[this.articleObj.types] = [this.articleObj];
       // console.log(article);
       this.axios
-        .post("http://localhost:3001/articles/post", {
+        .post(`${this.baseUrl}/articles/post`, {
           data: {
             userName: "longwei",
             types: this.articleObj.types,
