@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <AdHeader></AdHeader>
+    <AdHeader @getTypes="getTypes"></AdHeader>
     <Layout>
       <!-- <Sider
         breakpoint="md"
@@ -39,12 +39,14 @@
               <div class="content-box">
                 <!-- {{articleList}}----- -->
                 <!-- 文章列表 -->
-
-                <div>
+                <div v-if="!showTips">
                   <!-- <Article :articleIndex="articleIndex"></Article> -->
                   <Article v-for="(item,index) in articleList" :key="index" 
                   :articleIndex="index" :articleObj="articleList[index]"></Article>
                 </div>
+                 <div v-if="showTips" class="ad-tips">
+                   该分类下暂无数据，您可以查看其它分类
+                 </div>
                 <!-- <div vif="showArticle">
                   <ArticleContent></ArticleContent>
                 </div> -->
@@ -95,6 +97,7 @@ export default {
 
       showArticle: false,
       articleList: [],
+      showTips:false,//是否显示没有内容的提示
       // articleIndex:1
     };
   },
@@ -104,19 +107,25 @@ export default {
     }
   },
   methods: {
-    getArticle() {
+    // 子组件传来的点击每一项大类
+    getTypes(name){
+      this.getArticle(name)
+    },
+    getArticle(flag) {
       this.axios
         .get("articles/get", {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
             userName: "longwei",
-            flag:"all",//all表示所有文章
+            flag:flag,//all表示所有文章
           }
         })
         .then(res => {
+          console.log(res.data.resulet,66666)
+          res.data.resulet.length>0?this.showTips= false:this.showTips= true
           this.articleList = res.data.resulet;
-          console.log(this.articleList, 111111);
+          
         })
         .catch(err => {
           console.log("err", err);
@@ -133,7 +142,9 @@ export default {
     //     el: ".swiper-pagination"
     //   }
     // });
-    this.getArticle();
+    // 默认获取所有的文章
+    this.getArticle("all");
+    
   }
 };
 </script>
@@ -271,4 +282,7 @@ export default {
 // .ad-none {
 //   display: none !important;
 // }
+.ad-tips{
+  text-align: center;
+}
 </style>

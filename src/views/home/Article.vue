@@ -5,9 +5,8 @@
       <a
         @click="gotoContent"
         class="page-img"
-        style="background-image: url(http://www.shukoe.com/content/uploadfile/202004/f3cc1585912432.jpg);"
         ><img
-          src="http://www.shukoe.com/content/templates/embaidu/images/blank.png"
+          :src="articleObj.coverImage"
           alt="读完百度优质内容指南的一点感悟"
       /></a>
     </div>
@@ -95,6 +94,8 @@ export default {
       height: auto;
       vertical-align: middle;
       border-style: none;
+      height: 120px;
+
     }
   }
 }

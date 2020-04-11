@@ -4,30 +4,17 @@
       <Menu mode="horizontal" theme="dark" active-name="1">
         <div class="layout-logo"></div>
         <div class="layout-nav">
-          <MenuItem name="1">
-            <Icon type="ios-navigate"></Icon>
-            首页导航
+          <MenuItem
+            
+            v-for="(item, index) in headerList"
+            :key="index"
+            :name="item.name"
+          ><span  @click="getHeader(item.name)">
+            <Icon :type="item.type"></Icon>
+            {{ item.text }}
+            </span>
           </MenuItem>
-          <MenuItem name="2">
-            <Icon type="ios-keypad"></Icon>
-            搜狗联盟
-          </MenuItem>
-          <MenuItem name="3">
-            <Icon type="ios-analytics"></Icon>
-            百度联盟
-          </MenuItem>
-          <MenuItem name="4">
-            <Icon type="ios-paper"></Icon>
-            360联盟
-          </MenuItem>
-          <MenuItem name="4">
-            <Icon type="ios-paper"></Icon>
-            推广联盟
-          </MenuItem>
-          <MenuItem name="4">
-            <Icon type="ios-paper"></Icon>
-            谷歌联盟
-          </MenuItem>
+
           <MenuItem name="4">
             <Input
               suffix="ios-search"
@@ -42,13 +29,51 @@
 </template>
 <script>
 export default {
-    name:"AdHeader",
-     components:{},
+  name: "AdHeader",
+  components: {},
   data() {
     return {
-
-    }}
-}
+      headerList: [
+        {
+          name: "all",
+          type: "ios-navigate",
+          text: "首页导航"
+        },
+        {
+          name: "sougou",
+          type: "ios-keypad",
+          text: "搜狗联盟"
+        },
+        {
+          name: "baidu",
+          type: "ios-analytics",
+          text: "百度联盟"
+        },
+        {
+          name: "sanliuling",
+          type: "ios-paper",
+          text: "360联盟"
+        },
+        {
+          name: "gogle",
+          type: "ios-paper",
+          text: "谷歌联盟"
+        },
+        {
+          name: "tuiguang",
+          type: "ios-paper",
+          text: "赚钱联盟"
+        }
+      ]
+    };
+  },
+  methods: {
+    getHeader(name) {
+      // console.log(name);
+      this.$emit("getTypes",name)
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>

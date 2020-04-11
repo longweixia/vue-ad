@@ -39,11 +39,11 @@
               <div class="content-box">
                 <!-- 文章标题 -->
                 <div>
-                  <h2 class="log-title">{{articleObj.title}}</h2>
+                  <h2 class="log-title">{{ articleObj.title }}</h2>
                   <div class="log-meta clearfix">
-                    <span>{{articleObj.autor}}</span>
-                    <span>{{articleObj.times}}</span>
-                    <span>{{articleObj.Pageview}}次浏览</span>
+                    <span>{{ articleObj.autor }}</span>
+                    <span>{{ articleObj.times }}</span>
+                    <span>{{ articleObj.Pageview }}次浏览</span>
                   </div>
                 </div>
                 <VueMarkdown
@@ -98,32 +98,62 @@ export default {
     }
   },
   methods: {
-    getArticle(index,types,idIndex) {
+    getArticle(index, types, idIndex) {
       this.axios
         .get("articles/get", {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
             userName: "longwei",
-            flag:types,//all表示所有文章
-            idIndex:idIndex
+            flag: types, //all表示所有文章
+            idIndex: idIndex
           }
         })
         .then(res => {
           this.articleObj = res.data.resulet;
-         
-          // console.log(this.articleObj, 1111122221);
+          this.articleObj.Pageview = res.data.resulet.Pageview + 1;
+          this.submit();
         })
         .catch(err => {
           console.log("err", err);
+        });
+    },
+    // 增加阅读量
+    submit() {
+      // 如果id存在就是修改，如果id不存在就是新增
+      // 拼装article数据
+      let article = {};
+      article[this.articleObj.types] = [this.articleObj];
+      // console.log(article);
+      this.axios
+        .post("http://localhost:3001/articles/post", {
+          data: {
+            userName: "longwei",
+            types: this.articleObj.types,
+            id: this.articleObj.id,
+            article: article
+          }
+        })
+        .then(res => {
+          if (res.data.status == "0") {
+            // this.$message.success('发布成功');
+          } else {
+            // this.$message.error('发布失败' + res.data.msg);
+          }
+        })
+        .catch(err => {
+          // this.$message.error('发布失败' + err);
         });
     }
   },
   mounted() {
     console.log(typeof this.$route.query.articleIndex);
     // this.articleIndex = this.$route.query.articleIndex;
-    this.getArticle(this.$route.query.articleIndex,
-    this.$route.query.types,this.$route.query.idIndex);
+    this.getArticle(
+      this.$route.query.articleIndex,
+      this.$route.query.types,
+      this.$route.query.idIndex
+    );
   }
 };
 </script>
@@ -183,21 +213,21 @@ export default {
         // 标记，时间，作者
         .log-meta {
           font-size: 12px;
-    margin-bottom: 20px;
-    color: #868e96;
+          margin-bottom: 20px;
+          color: #868e96;
           @media screen and (min-width: 992px) {
-                margin-bottom: 30px;
+            margin-bottom: 30px;
           }
           span {
-    float: left;
-    margin-right: 10px;
-}
+            float: left;
+            margin-right: 10px;
+          }
         }
         .clearfix::after {
-    display: block;
-    clear: both;
-    content: '';
-}
+          display: block;
+          clear: both;
+          content: "";
+        }
         .content-page {
           // word-break: break-all !important;
           // @media screen and (min-width: 992px) {
