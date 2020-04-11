@@ -114,7 +114,7 @@ export default {
     getArticle(flag) {
       console.log(this.baseUrl,9898989)
       this.axios
-        .get(`${this.baseUrl}/articles/get`, {
+        .get(`${this.baseUrl}/articles/get`, {//接全部改成模板字符创
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
