@@ -13,7 +13,8 @@ module.exports = {
       // /users/**表示有三级路由
       // 注意，如果新建的代理，调用接口报404，可以npm run dev后再调用
       '/api':{
-        target:'http://localhost:3001', //接口以api开头就会进行接口代理
+        // 上服务器后改成http://47.103.40.123:3001
+        target:'http://localhost:3001', //接口以api开头就会进行接口代理，
         changeOrigin:true,
         pathRewrite:{
           "^/api":"/"
@@ -41,6 +42,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
+    // 上传到服务器后，把localhost改成0.0.0.0还要把上面的3001改了
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8082, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
