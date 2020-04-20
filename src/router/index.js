@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home1 from '@/views/home/Home1'
 import ArticleContent from '@/views/home/ArticleContent'
+import Article from '@/views/home/Article'
 import GroupChart from '@/views/GroupChart/GroupChart'
 import Login from '@/views/login/Login'
 import WriteBaseInfo from '@/views/resume/WriteBaseInfo'
@@ -26,18 +27,23 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'home1',
-            component: Home1
+            name: 'article',
+            component: Article
         },
-        {
-            path: '/home1',
-            name: 'home1',
-            component: Home1
-        },
+        // {
+        //     path: '/home1',
+        //     name: 'home1',
+        //     component: Home1
+        // },
         {
             path: '/articleContent',
             name: 'ArticleContent',
             component: ArticleContent
+        },
+        {
+            path: '/article',
+            name: 'Article',
+            component: Article
         },
         {
             path: '/login',

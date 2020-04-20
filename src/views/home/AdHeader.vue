@@ -5,14 +5,13 @@
         <div class="layout-logo"></div>
         <div class="layout-nav">
           <MenuItem
-            
             v-for="(item, index) in headerList"
             :key="index"
-            :name="item.name"
-          ><span  @click="getHeader(item.name)">
+            :name="item.name" 
+          ><div class="header-type" @click="getHeader(item.name)">
             <Icon :type="item.type"></Icon>
             {{ item.text }}
-            </span>
+            </div>
           </MenuItem>
 
           <MenuItem name="4">
@@ -70,6 +69,9 @@ export default {
   methods: {
     getHeader(name) {
       // console.log(name);
+       this.$router.push({
+        path: "/home1"
+      });
       this.$emit("getTypes",name)
     }
   }
@@ -79,6 +81,12 @@ export default {
 <style lang="less" scoped>
 .layout {
   height: 60px;
+}
+/deep/ .ivu-menu-item{
+  cursor: text;
+}
+.header-type{
+  cursor: pointer;
 }
 // .layout-header-bar {
 //   background: #eeeeee;

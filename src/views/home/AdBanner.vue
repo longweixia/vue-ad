@@ -4,19 +4,20 @@
       <div class="zm-banner">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="../../../static/image/banner1.png" alt="" />
-            </div>
-            <div class="swiper-slide">
-              <img src="../../../static/image/banner1.png" alt="" />
-            </div>
-            <div class="swiper-slide">
-              <img src="../../../static/image/banner1.png" alt="" />
+            <div
+              class="swiper-slide"
+              v-for="(item, index) in bannerData"
+              :key="index"
+            >
+              <a :href="item.routerUrl">
+                <img :src="item.url" :alt="item.name" :title="item.name" />
+              </a>
             </div>
           </div>
+          <!-- 如果需要分页器 -->
+          <div class="swiper-pagination"></div>
         </div>
-        <!-- 如果需要分页器 -->
-        <div class="swiper-pagination"></div>
+
         <!-- banner中的输入框 -->
         <!-- <Row class="zm-banner-input">
               <Col span="8" class="banner-input-Col">
@@ -39,18 +40,40 @@ export default {
   name: "AdBanner",
   components: {},
   data() {
-    return {};
+    return {
+      bannerData: []
+    };
   },
-  mounted(){
-        var mySwiper = new Swiper(".swiper-container", {
+  methods: {
+    // 获取banner数据
+    getData(flag) {
+      this.axios
+        .get(`${this.baseUrl}/banners/get`, {
+          params: {
+            flag: flag
+          }
+        })
+        .then(res => {
+          this.bannerData = res.data.resulet;
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    }
+  },
+  mounted() {
+    var mySwiper = new Swiper(".swiper-container", {
       autoplay: true,
       delay: 2000, //2秒切换一次
       loop: true,
       // 如果需要分页器
       pagination: {
         el: ".swiper-pagination"
-      }
+      },
+      observer: true, //修改swiper自己或子元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
     });
+    this.getData("all");
   }
 };
 </script>
@@ -92,7 +115,7 @@ export default {
 .zm-banner {
   img {
     width: 100%;
-    height: 300px;
+    height: 350px;
   }
 }
 .swiper-pagination {

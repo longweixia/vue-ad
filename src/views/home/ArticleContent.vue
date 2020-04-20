@@ -1,87 +1,66 @@
 <template>
   <div class="layout">
-    <AdHeader></AdHeader>
-    <Layout>
-      <!-- <Sider
-        breakpoint="md"
-        collapsible
-        :collapsed-width="78"
-        v-model="isCollapsed"
+    <Home1>
+      <Content
+        slot="articleContent"
+        :style="{ minHeight: '220px' }"
+        class="ad-content"
       >
-        <Menu
-          active-name="1-2"
-          theme="dark"
-          width="auto"
-          :class="menuitemClasses"
-        >
-          <MenuItem name="1-1">
-            <Icon type="ios-navigate"></Icon>
-            <span>Option 1</span>
-          </MenuItem>
-          <MenuItem name="1-2">
-            <Icon type="ios-search"></Icon>
-            <span>Option 2</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-            <Icon type="ios-settings"></Icon>
-            <span>Option 3</span>
-          </MenuItem>
-        </Menu>
-        <div slot="trigger"></div>
-      </Sider> -->
-      <Layout>
-        <!-- <AdBanner></AdBanner>
-        <AdTipRow></AdTipRow> -->
-
-        <Content :style="{ minHeight: '220px' }" class="ad-content">
-          <div class="ad-content-div">
-            <div class="ad-content-left">
-              <div class="content-box">
-                <!-- 文章标题 -->
-                <div>
-                  <h2 class="log-title">{{ articleObj.title }}</h2>
-                  <div class="log-meta clearfix">
-                    <span>{{ articleObj.autor }}</span>
-                    <span>{{ articleObj.times }}</span>
-                    <span>{{ articleObj.Pageview }}次浏览</span>
-                  </div>
+        <div class="ad-content-div">
+          <div class="ad-content-left">
+            <div class="content-box">
+              <!-- 文章标题 -->
+              <div>
+                <h2 class="log-title">{{ articleObj.title }}</h2>
+                <div class="log-meta clearfix">
+                  <span>{{ articleObj.autor }}</span>
+                  <span>{{ articleObj.times }}</span>
+                  <span>{{ articleObj.Pageview }}次浏览</span>
                 </div>
-                <VueMarkdown
-                  class="content-page"
-                  :source="articleObj.content"
-                ></VueMarkdown>
+              </div>
+              <!-- 文章内容 -->
+              <VueMarkdown
+                class="content-page"
+                :source="articleObj.content"
+              ></VueMarkdown>
+              <!-- 文章底部 上一篇，下一篇 -->
+              <div class="log-neighbor clearfix">
+                <a v-if="nextPre.nextidIndex > -1" @click="gotoContent()"
+                  ><span>上一篇：</span>{{ nextPre.nextname }}</a
+                ><a v-if="nextPre.preidIndex !== -1" @click="gotoContent()"
+                  ><span>下一篇：</span>{{ nextPre.prename }}</a
+                >
+              </div>
+              <div class="log-readmore">
+                <h5 class="page-header">继续阅读</h5>
+                <ul>
+                  <li v-for="(item, index) in keepList" :key="index">
+                    <span class="page-dot"></span><a>{{ item.title }}</a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div>
-              <ArticleRight></ArticleRight>
-            </div>
           </div>
-        </Content>
-      </Layout>
-
-      <AdFooter></AdFooter>
-    </Layout>
+          <div>
+            <!-- <ArticleRight :random="random"></ArticleRight> -->
+          </div>
+        </div>
+      </Content>
+    </Home1>
   </div>
 </template>
 
 <script>
-import AdHeader from "./AdHeader";
-import AdBanner from "./AdBanner";
-import AdTipRow from "./AdTipRow";
-
-import AdFooter from "./AdFooter";
-import ArticleRight from "./ArticleRight";
+import Home1 from "./Home1";
+import ArticleBottom from "./ArticleBottom";
 import VueMarkdown from "vue-markdown";
-
+import Bus from "@/assets/event-bus.js";
 export default {
   name: "ArticleContent",
   components: {
-    AdHeader,
-    AdBanner,
-    AdTipRow,
+    Home1,
+    ArticleBottom,
 
-    AdFooter,
-    ArticleRight,
     VueMarkdown
   },
   data() {
@@ -89,7 +68,11 @@ export default {
       // isCollapsed: false,
       // value3: 0,
       // showArticle: false,
-      articleObj: {}
+      articleObj: {},
+      random: [],
+      articleIndex: "",
+      keepList: [],
+      nextPre: {} //上一页，下一篇数据
     };
   },
   computed: {
@@ -98,12 +81,28 @@ export default {
     }
   },
   methods: {
-    getArticle(index, types, idIndex) {
+    // 继续阅读
+    getArticleKeep(types, index) {
+      this.axios
+        .get(`${this.baseUrl}/articles/getKeep`, {
+          params: {
+            userName: "longwei",
+            flag: types
+          }
+        })
+        .then(res => {
+          console.log(res.data, 9898989899898989898989);
+          this.keepList = res.data.resulet;
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
+    getArticle(types, idIndex) {
+      console.log(idIndex, 6666666);
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
           params: {
-            // pageSize: this.pageSize,
-            // currentPage:this.currentPage,
             userName: "longwei",
             flag: types, //all表示所有文章
             idIndex: idIndex
@@ -112,7 +111,6 @@ export default {
         .then(res => {
           this.articleObj = res.data.resulet;
           this.articleObj.Pageview = res.data.resulet.Pageview + 1;
-          this.submit();
         })
         .catch(err => {
           console.log("err", err);
@@ -123,7 +121,9 @@ export default {
       // 如果id存在就是修改，如果id不存在就是新增
       // 拼装article数据
       let article = {};
+      this.articleObj.Pageview= this.articleObj.Pageview+1
       article[this.articleObj.types] = [this.articleObj];
+      article[this.articleObj.types]
       // console.log(article);
       this.axios
         .post(`${this.baseUrl}/articles/post`, {
@@ -147,13 +147,24 @@ export default {
     }
   },
   mounted() {
-    console.log(typeof this.$route.query.articleIndex);
-    // this.articleIndex = this.$route.query.articleIndex;
-    this.getArticle(
-      this.$route.query.articleIndex,
-      this.$route.query.types,
-      this.$route.query.idIndex
+    //传给后台的文章id数组
+    // let ary = [];
+    // // let articleLength = Number(this.$route.query.articleLength); //文章长度
+    // this.articleIndex = this.$route.query.articleIndex; //文章下标
+    // let types = this.$route.query.types; //文章类型
+    // let idIndex = Number(this.$route.query.idIndex); //文章id
+
+    this.articleObj = JSON.parse(
+      decodeURIComponent(this.$route.query.articleObj)
     );
+    this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre));
+    this.getArticleKeep("baidu", "baidu1");
+    this.submit();
+    // console.log(this.$route.query.articleIndex)
+    // this.getArticle(
+    //   this.$route.query.types,//大类
+    //   this.$route.query.idIndex,//id标志
+    // );
   }
 };
 </script>

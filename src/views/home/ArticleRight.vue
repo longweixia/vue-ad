@@ -1,21 +1,18 @@
 <template>
   <div class="col-right d-none d-lg-block" style="">
-    <a
-      href="http://www.shukoe.com/post-1134.html"
-      rel="nofollow"
-      target="_blank"
-      ><img src="http://www.shukoe.com/b1.jpg" alt="最新项目"
+    <a :href="listTop.routerUrl" rel="nofollow" target="_blank"
+      ><img style="width:100%" :src="listTop.url" :alt="listTop.name"
     /></a>
     <div class="sidebar-box">
       <h4 class="sidebar-title">随机文章</h4>
       <div class="sidebar-log">
         <ul>
-          <li>
-            <a href="http://www.shukoe.com/post-163.html"
-              >愿天堂没有痛苦,六点半腿腿走好</a
-            >
+          <li v-for="(item, index) in random" :key="index">
+            <a @click="gotoContent(1, item.types, item.idIndex)">{{
+              item.title
+            }}</a>
           </li>
-          <li>
+          <!-- <li>
             <a href="http://www.shukoe.com/post-164.html"
               >香港电影中的迁徙往事</a
             >
@@ -55,7 +52,7 @@
             <a href="http://www.shukoe.com/post-173.html"
               >360联盟注册账号出现问题怎么办？</a
             >
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -63,140 +60,24 @@
       <h4 class="sidebar-title">左邻右舍</h4>
       <div class="sidebar-link">
         <ul class="clearfix">
-          <li>
-            <a href="http://www.liuxuseo.cn" title="" target="_blank"
-              >刘旭博客</a
+          <li v-for="(item,index) in linkList" :key="index">
+            <a :href="item.url" :title="item.name" target="_blank"
+              >{{item.name}}</a
             >
           </li>
-          <li>
-            <a href="http://www.liuyingqiang.com/" title="" target="_blank"
-              >网赚项目</a
-            >
-          </li>
-          <li>
-            <a href="https://www.liwei8090.com/" title="" target="_blank"
-              >里维斯社</a
-            >
-          </li>
-          <li>
-            <a
-              href="http://www.shukoe.com/"
-              title="站长广告联盟"
-              target="_blank"
-              >站长广告联盟</a
-            >
-          </li>
-          <li>
-            <a href="http://www.shukoe.com" title="广告联盟赚钱" target="_blank"
-              >广告联盟赚钱</a
-            >
-          </li>
-          <li>
-            <a href="https://www.wazhuan.net/" title="" target="_blank"
-              >免费赚钱</a
-            >
-          </li>
-          <li>
-            <a href="http://www.yohojie.com" title="" target="_blank">有赚网</a>
-          </li>
-          <li>
-            <a href="http://www.caiens.com/" title="" target="_blank"
-              >网上挣钱</a
-            >
-          </li>
-          <li>
-            <a href="https://zhangzifan.com" title="" target="_blank"
-              >泪雪博客</a
-            >
-          </li>
-          <li>
-            <a href="https://www.niuwz.cn" title="" target="_blank">网赚</a>
-          </li>
-          <li>
-            <a href="http://www.vvloo.com/" title="探项目" target="_blank"
-              >探项目</a
-            >
-          </li>
-          <li>
-            <a href="http://butaolu.com/" title="" target="_blank">网赚博客</a>
-          </li>
-          <li>
-            <a href="http://www.yangmaoduo.com/" title="羊毛多" target="_blank"
-              >羊毛多</a
-            >
-          </li>
-          <li>
-            <a href="http://www.hakseo.com" title="陕西seo" target="_blank"
-              >陕西seo</a
-            >
-          </li>
-          <li>
-            <a href="https://www.mmfi.net/" title="" target="_blank"
-              >网赚博客</a
-            >
-          </li>
-          <li>
-            <a href="http://www.m1927.com/" title="免费赚钱" target="_blank"
-              >免费赚钱</a
-            >
-          </li>
-          <li>
-            <a href="http://www.jiankeba.com" title="" target="_blank"
-              >兼职赚钱</a
-            >
-          </li>
-          <li>
-            <a href="http://www.wuxianwz.cn" title="" target="_blank"
-              >无限博客</a
-            >
-          </li>
-          <li>
-            <a href="http://www.zcd6.com/" title="" target="_blank">兼职赚钱</a>
-          </li>
-          <li>
-            <a href="http://www.ttsz8.com/" title="" target="_blank"
-              >天天手赚吧</a
-            >
-          </li>
-          <li>
-            <a href="http://www.yokao.net" title="" target="_blank">网赚</a>
-          </li>
-          <li>
-            <a href="https://www.chinahzx.cn/" title="" target="_blank"
-              >pos机办理</a
-            >
-          </li>
-          <li>
-            <a href="http://www.80kezhan.com" title="网赚博客" target="_blank"
-              >网赚博客</a
-            >
-          </li>
-          <li>
-            <a href="http://www.shukoe.com/" title="" target="_blank"
-              >点击广告联盟</a
-            >
-          </li>
-          <li>
-            <a href="http://www.vv8c.com/" title="" target="_blank">微信seo</a>
-          </li>
+         
         </ul>
       </div>
     </div>
     <div id="sticky-wrapper" class="sticky-wrapper" style="height: 209px;">
       <div class="sidebar-box js_asd_bottom" style="width: 300px;">
         <div class="sidebar-custom">
-          <a
-            href="http://www.shukoe.com/post-1038.html"
-            rel="nofollow"
-            target="_blank"
-            ><img
-              src="http://www.shukoe.com/content/templates/embaidu/images/asd/04.jpg"
-              alt="最新项目"
+          <a :href="listBottom.routerUrl" rel="nofollow" target="_blank"
+            ><img :src="listBottom.url" :alt="listBottom.name"
           /></a>
         </div>
       </div>
     </div>
-  
   </div>
 </template>
 <script>
@@ -204,13 +85,106 @@
 // import README from './README.md';
 export default {
   name: "ArticleRight",
+  // props:["random"],
   data() {
     return {
-   
+      listTop: {},
+      listBottom: {},
+      random: [],
+      linkList:[]
     };
   },
+  methods: {
+    // 进入文章详情
+    gotoContent(articleIndex, types, idIndex) {
+      const { href } = this.$router.resolve({
+        path: "/articleContent",
+        query: {
+          articleIndex: articleIndex,
+          types: types,
+          idIndex: idIndex
+        }
+      });
+      window.open(href, "_blank");
+
+      // this.$router.push({
+      //   path: "/articleContent",
+      //   query: {
+      //     articleIndex: articleIndex,
+      //     types:types,
+      //     idIndex:idIndex
+      //   }
+      // });
+    },
+    // 获取侧边栏广告图
+    getData(flag) {
+      this.axios
+        .get(`${this.baseUrl}/sidebarAdImgs/get`, {
+          params: {
+            flag: flag
+          }
+        })
+        .then(res => {
+          let list = res.data.resulet;
+          list.forEach((item, index) => {
+            if (item.types == "top" && item.show == 1) {
+              this.listTop = item;
+            } else if (item.types == "buttom" && item.show == 1) {
+              this.listBottom = item;
+            }
+          });
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
+    // 获取友情链接
+    getLink() {
+      this.axios
+        .get(`${this.baseUrl}/friendLinks/get`)
+        .then(res => {
+          this.linkList = res.data.resulet;
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
+    getArticle(flag) {
+      this.axios
+        .get(`${this.baseUrl}/articles/get`, {
+          //接全部改成模板字符创
+          params: {
+            // pageSize: this.pageSize,
+            // currentPage:this.currentPage,
+            userName: "longwei",
+            flag: flag //all表示所有文章
+          }
+        })
+        .then(res => {
+          res.data.resulet.forEach((item, index) => {
+            let obj = {
+              idIndex: item.idIndex,
+              types: item.types,
+              title: item.title
+            };
+            this.random.push(obj);
+          });
+          // 取第6篇文章开始取
+          // this.random = this.random.splice(6, 12);
+           this.random = this.random.splice(1, 3);
+          this.random = this.random.sort(() => Math.random() - 0.5);
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    }
+  },
   computed: {},
-  mounted() {}
+  mounted() {
+    this.getData("all");
+    this.getArticle("all");
+    this.getLink();
+  }
 };
 </script>
 
@@ -263,10 +237,9 @@ export default {
         }
       }
     }
-    
   }
-  .sidebar-box1{
-      margin-bottom: 20px;
+  .sidebar-box1 {
+    margin-bottom: 20px;
     padding: 30px;
     background-color: #fff;
     .sidebar-title {
@@ -277,7 +250,7 @@ export default {
     h4 {
       font-size: 18px;
     }
-      .sidebar-link {
+    .sidebar-link {
       padding-top: 10px;
       ul {
         padding-left: 0;
@@ -300,10 +273,10 @@ export default {
         }
       }
       .clearfix::after {
-    display: block;
-    clear: both;
-    content: '';
-}
+        display: block;
+        clear: both;
+        content: "";
+      }
     }
   }
 }
@@ -321,21 +294,21 @@ export default {
   }
 }
 .sidebar-box {
-    margin-bottom: 20px;
-    padding: 30px;
-    background-color: #fff;
-    a {
+  margin-bottom: 20px;
+  padding: 30px;
+  background-color: #fff;
+  a {
     cursor: pointer;
     text-decoration: none;
     color: #212529;
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
     img {
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
-    border-style: none;
-}
-}
+      max-width: 100%;
+      height: auto;
+      vertical-align: middle;
+      border-style: none;
+    }
+  }
 }
 </style>

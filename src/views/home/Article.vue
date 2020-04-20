@@ -1,63 +1,124 @@
 <template>
   <div class="content-article">
-    <!-- <Home1></Home1> -->
-    <div class="article-left">
-      <a
-        @click="gotoContent"
-        class="page-img"
-        ><img
-          :src="articleObj.coverImage"
-          alt="读完百度优质内容指南的一点感悟"
-      /></a>
-    </div>
-    <div class="article-right">
-      <div class="article-text">
-        <div class="article-title">
-          <a @click="gotoContent">{{ articleObj.title }}</a>
+    <Home1>
+      <div slot="article">
+        <div v-if="showTips" class="ad-tips">
+          该分类下暂无数据，您可以查看其它分类
         </div>
-        <div class="list-text">
-          <VueMarkdown
-            class="content-page"
-            :source="articleObj.content"
-          ></VueMarkdown>
-        </div>
-        <div class="list-meta">
-          <i class="page-top bg-danger">{{articleObj.tag}}}</i>
-          <span class="float-left mr-small">{{ articleObj.autor }}</span
-          >{{ articleObj.times }}
+        <div v-if="!showTips" class="ad-content-left">
+          <div >
+            <div class="content-box" v-for="(item, index) in articleObj" :key="index">
+              <div class="article-left">
+                <a @click="gotoContent(iitem,index)" class="page-img"
+                  ><img
+                    :src="item.coverImage"
+                    alt="读完百度优质内容指南的一点感悟"
+                /></a>
+              </div>
+              <div class="article-right">
+                <div class="article-text">
+                  <div class="article-title">
+                    <a @click="gotoContent(item,index)">{{ item.title }}</a>
+                  </div>
+                  <div class="list-text">
+                    <VueMarkdown
+                      class="content-page"
+                      :source="item.content"
+                    ></VueMarkdown>
+                  </div>
+                  <div class="list-meta">
+                    <i class="page-top bg-danger">{{ item.tag }}}</i>
+                    <span class="float-left mr-small">{{ item.autor }}</span
+                    >{{ item.times }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Home1>
   </div>
 </template>
 
 <script>
-// import Home1 from './Home1';
+import Home1 from "./Home1";
 import VueMarkdown from "vue-markdown";
+import Bus from "@/assets/event-bus.js";
 export default {
   name: "Article",
 
-  props: ["articleIndex", "articleObj"],
-  components: { VueMarkdown },
+  props: [],
+  components: { VueMarkdown, Home1 },
   data() {
-    return {};
+    return {
+      articleList: [],
+      showTips: false, //是否显示没有内容的提示
+      articleLength: 1, //文章长度
+      articleIndex: 0,
+      articleObj: [
+        {
+          coverImage: "",
+          title: "",
+          content: "",
+          tag: "",
+          autor: "",
+          times: ""
+        }
+      ]
+    };
   },
   computed: {},
   methods: {
+    getArticle(flag) {
+      this.axios
+        .get(`${this.baseUrl}/articles/get`, {
+          //接全部改成模板字符创
+          params: {
+            // pageSize: this.pageSize,
+            // currentPage:this.currentPage,
+            userName: "longwei",
+            flag: flag //all表示所有文章
+          }
+        })
+        .then(res => {
+          //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
+          res.data.resulet.length > 0
+            ? (this.showTips = false)
+            : (this.showTips = true);
+          this.articleObj = res.data.resulet;
+          console.log(this.articleObj, "打印文章数据");
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
     // 进入文章详情
-    gotoContent() {
-      this.$router.push({
-        path: "/articleContent",
-        query: {
-          articleIndex: this.articleIndex,
-          types:this.articleObj.types,
-          idIndex:this.articleObj.idIndex
-
-        }
-      });
+    gotoContent(item,index) {
+      //拼装上一页，下一页数据
+      let nextidIndex=this.articleObj[index-1]?this.articleObj[index-1].idIndex:-1
+        let  nextname=this.articleObj[index-1]?this.articleObj[index-1].title:-1
+       let  preidIndex=this.articleObj[index+1]?this.articleObj[index+1].idIndex:-1
+         let prename=this.articleObj[index+1]?this.articleObj[index+1].title:-1
+         let nextPre={
+           nextidIndex:nextidIndex,
+           nextname:nextname,
+           preidIndex:preidIndex,
+           prename:prename,
+         }
+        this.$router.push({
+          path: "/articleContent",
+          query: {
+            // vue路由传对象刷新会报错，数据丢失，用json字符串解决
+            articleObj:encodeURIComponent(JSON.stringify(item)),
+            nextPre:encodeURIComponent(JSON.stringify(nextPre))//上一页下一页数据
+          }
+        });
     }
   },
-  mounted() {}
+  created() {
+    this.getArticle("all");
+  }
 };
 </script>
 
@@ -95,7 +156,6 @@ export default {
       vertical-align: middle;
       border-style: none;
       height: 120px;
-
     }
   }
 }
@@ -170,5 +230,30 @@ export default {
   display: block;
   clear: both;
   content: "";
+}
+.ad-content-left {
+  float: left;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 10px;
+  padding-left: 10px;
+  @media screen and (min-width: 992px) {
+    width: 640px;
+  }
+  @media screen and (min-width: 1200px) {
+    width: 820px;
+  }
+  .content-box {
+    // background-color: #fff;
+    // @media screen and  (min-width: 992px) {
+    margin-right: 0;
+    margin-bottom: 20px;
+    margin-left: 0;
+    padding: 30px;
+    min-height: 155px;
+    background-color: #fff;
+
+    // }
+  }
 }
 </style>

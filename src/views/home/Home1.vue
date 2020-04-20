@@ -35,26 +35,27 @@
        
         <Content :style="{ minHeight: '220px' }" class="ad-content">
           <div class="ad-content-div">
-            <div class="ad-content-left">
-              <div class="content-box">
+            
                 <!-- {{articleList}}----- -->
                 <!-- 文章列表 -->
-                <div v-if="!showTips">
-                  <!-- <Article :articleIndex="articleIndex"></Article> -->
+                <slot name="article"></slot>
+                <slot name="articleContent"></slot>
+
+                <!-- <div v-if="!showTips">
+
                   <Article v-for="(item,index) in articleList" :key="index" 
-                  :articleIndex="index" :articleObj="articleList[index]"></Article>
+                  :articleIndex="index" :articleObj="articleList"></Article>
                 </div>
                  <div v-if="showTips" class="ad-tips">
                    该分类下暂无数据，您可以查看其它分类
-                 </div>
+                 </div> -->
                 <!-- <div vif="showArticle">
                   <ArticleContent></ArticleContent>
                 </div> -->
                 <!-- <div>
                <VueMarkdown :source="articleList"></VueMarkdown>
                 </div> -->
-              </div>
-            </div>
+             
             <div>
               <ArticleRight></ArticleRight>
             </div>
@@ -74,10 +75,11 @@ import AdBanner from "./AdBanner";
 import AdTipRow from "./AdTipRow";
 // import Swiper from "swiper";
 // import "swiper/dist/css/swiper.min.css";
-import Article from "./Article";
+// import Article from "./Article";
 import AdFooter from "./AdFooter";
 import ArticleRight from "./ArticleRight";
-import ArticleContent from "./ArticleContent";
+// import ArticleContent from "./ArticleContent";
+import Bus from "@/assets/event-bus.js";
 
 export default {
   name: "Home1",
@@ -85,10 +87,9 @@ export default {
     AdHeader,
     AdBanner,
     AdTipRow,
-    Article,
+    // Article,
     AdFooter,
-    ArticleRight,
-    ArticleContent
+    ArticleRight
   },
   data() {
     return {
@@ -97,7 +98,10 @@ export default {
 
       showArticle: false,
       articleList: [],
+      // random:[],//随机文章
       showTips:false,//是否显示没有内容的提示
+      articleLength:1,//文章长度
+      nextPre:[],//上一篇下一篇文章
       // articleIndex:1
     };
   },
@@ -111,27 +115,7 @@ export default {
     getTypes(name){
       this.getArticle(name)
     },
-    getArticle(flag) {
-      console.log(this.baseUrl,9898989)
-      this.axios
-        .get(`${this.baseUrl}/articles/get`, {//接全部改成模板字符创
-          params: {
-            // pageSize: this.pageSize,
-            // currentPage:this.currentPage,
-            userName: "longwei",
-            flag:flag,//all表示所有文章
-          }
-        })
-        .then(res => {
-          console.log(res.data.resulet,66666)
-          res.data.resulet.length>0?this.showTips= false:this.showTips= true
-          this.articleList = res.data.resulet;
-          
-        })
-        .catch(err => {
-          console.log("err", err);
-        });
-    }
+   
   },
   mounted() {
     // var mySwiper = new Swiper(".swiper-container", {
@@ -144,7 +128,7 @@ export default {
     //   }
     // });
     // 默认获取所有的文章
-    this.getArticle("all");
+
     
   }
 };
@@ -236,30 +220,30 @@ export default {
     // height: 2111px;
     margin-right: -10px;
     margin-left: -10px;
-    .ad-content-left {
-      float: left;
-      width: 100%;
-      min-height: 1px;
-      padding-right: 10px;
-      padding-left: 10px;
-      @media screen and (min-width: 992px) {
-        width: 640px;
-      }
-      @media screen and (min-width: 1200px) {
-        width: 820px;
-      }
-      .content-box {
-        // background-color: #fff;
-        // @media screen and  (min-width: 992px) {
-        margin-right: 0;
-        margin-bottom: 20px;
-        margin-left: 0;
-        padding: 30px;
-        background-color: #fff;
+    // .ad-content-left {
+    //   float: left;
+    //   width: 100%;
+    //   min-height: 1px;
+    //   padding-right: 10px;
+    //   padding-left: 10px;
+    //   @media screen and (min-width: 992px) {
+    //     width: 640px;
+    //   }
+    //   @media screen and (min-width: 1200px) {
+    //     width: 820px;
+    //   }
+    //   .content-box {
+    //     // background-color: #fff;
+    //     // @media screen and  (min-width: 992px) {
+    //     margin-right: 0;
+    //     margin-bottom: 20px;
+    //     margin-left: 0;
+    //     padding: 30px;
+    //     background-color: #fff;
 
-        // }
-      }
-    }
+    //     // }
+    //   }
+    // }
     // .ad-content-right {
     //   float: left;
     //   width: 100%;
