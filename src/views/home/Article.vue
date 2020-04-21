@@ -12,7 +12,7 @@
                 <a @click="gotoContent(iitem,index)" class="page-img"
                   ><img
                     :src="item.coverImage"
-                    alt="读完百度优质内容指南的一点感悟"
+                    alt="内容无法展示..."
                 /></a>
               </div>
               <div class="article-right">
@@ -27,7 +27,7 @@
                     ></VueMarkdown>
                   </div>
                   <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}}</i>
+                    <i class="page-top bg-danger">{{ item.tag }}</i>
                     <span class="float-left mr-small">{{ item.autor }}</span
                     >{{ item.times }}
                   </div>
@@ -110,7 +110,10 @@ export default {
           path: "/articleContent",
           query: {
             // vue路由传对象刷新会报错，数据丢失，用json字符串解决
-            articleObj:encodeURIComponent(JSON.stringify(item)),
+            // articleObj:encodeURIComponent(JSON.stringify(item)),
+            idIndex:this.articleObj[index].idIndex,
+            types:this.articleObj[index].types,
+
             nextPre:encodeURIComponent(JSON.stringify(nextPre))//上一页下一页数据
           }
         });

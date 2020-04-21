@@ -23,6 +23,13 @@
                 class="content-page"
                 :source="articleObj.content"
               ></VueMarkdown>
+               <div class="mb-default clearfix">
+                <a
+                  class="float-left btn btn-outline-default mr-small"
+                  href="http://www.shukoe.com/tag/%E8%B0%B7%E6%AD%8C%E8%81%94%E7%9B%9F"
+                  >谷歌联盟</a
+                >
+              </div>
               <!-- 文章底部 上一篇，下一篇 -->
               <div class="log-neighbor clearfix">
                 <a v-if="nextPre.nextidIndex > -1" @click="gotoContent()"
@@ -39,6 +46,9 @@
                   </li>
                 </ul>
               </div>
+             
+              <!-- 底部评论 -->
+              <Comment></Comment>
             </div>
           </div>
           <div>
@@ -53,6 +63,7 @@
 <script>
 import Home1 from "./Home1";
 import ArticleBottom from "./ArticleBottom";
+import Comment from "./Comment";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
@@ -61,7 +72,8 @@ export default {
     Home1,
     ArticleBottom,
 
-    VueMarkdown
+    VueMarkdown,
+    Comment
   },
   data() {
     return {
@@ -110,7 +122,11 @@ export default {
         })
         .then(res => {
           this.articleObj = res.data.resulet;
+         Bus.$emit("postArticleList",this.articleObj)
+          // this.articleObj = res.data.result
+
           this.articleObj.Pageview = res.data.resulet.Pageview + 1;
+          // this.submit();
         })
         .catch(err => {
           console.log("err", err);
@@ -121,9 +137,9 @@ export default {
       // 如果id存在就是修改，如果id不存在就是新增
       // 拼装article数据
       let article = {};
-      this.articleObj.Pageview= this.articleObj.Pageview+1
+      // this.articleObj.Pageview= this.articleObj.Pageview+1
       article[this.articleObj.types] = [this.articleObj];
-      article[this.articleObj.types]
+      article[this.articleObj.types];
       // console.log(article);
       this.axios
         .post(`${this.baseUrl}/articles/post`, {
@@ -147,24 +163,15 @@ export default {
     }
   },
   mounted() {
-    //传给后台的文章id数组
-    // let ary = [];
-    // // let articleLength = Number(this.$route.query.articleLength); //文章长度
-    // this.articleIndex = this.$route.query.articleIndex; //文章下标
-    // let types = this.$route.query.types; //文章类型
-    // let idIndex = Number(this.$route.query.idIndex); //文章id
-
-    this.articleObj = JSON.parse(
-      decodeURIComponent(this.$route.query.articleObj)
+    this.getArticle(
+      this.$route.query.types, //大类
+      Number(this.$route.query.idIndex) //id标志
     );
+    // this.articleObj = JSON.parse(
+    //   decodeURIComponent(this.$route.query.articleObj)
+    // );
     this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre));
     this.getArticleKeep("baidu", "baidu1");
-    this.submit();
-    // console.log(this.$route.query.articleIndex)
-    // this.getArticle(
-    //   this.$route.query.types,//大类
-    //   this.$route.query.idIndex,//id标志
-    // );
   }
 };
 </script>
@@ -265,5 +272,47 @@ export default {
       }
     }
   }
+}
+.mb-default {
+    margin-bottom: 20px !important;
+}
+.btn:not(:disabled) {
+    cursor: pointer;
+        border: 1px solid #ddd;
+}
+
+.mr-small {
+    margin-right: 10px !important;
+}
+.float-left {
+    float: left !important;
+}
+.btn-outline-default {
+    color: #868e96;
+    border-color: #868e96;
+
+}
+.btn {
+    font: inherit;
+    font-size: 14px;
+    line-height: 33px;
+    display: inline-block;
+    overflow: visible;
+    height: 35px;
+    margin: 0;
+    padding: 0 20px;
+    transition: 0.2s ease-in-out;
+    transition-property: color,background-color,border-color;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    text-transform: none;
+    border: 1px solid transparent;
+    border-radius: 2px;
+}
+.clearfix::after {
+    display: block;
+    clear: both;
+    content: '';
 }
 </style>
