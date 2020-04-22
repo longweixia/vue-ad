@@ -56,15 +56,18 @@
             </div>
           </div>
         </div>
-        <div v-if="item.Reply[0]" class="comment-list comment-children" id="comment-4500">
+        <div
+          v-for="(item1, index1) in item.Reply"
+          :key="index1"
+          class="comment-list comment-children"
+          id="comment-4500"
+        >
           <a name="4500"></a>
           <div class="clearfix">
             <div class="comment-left">
-              <img
-                :src="item.Reply[0].headPic"
-              />
+              <img :src="item1.headPic" />
             </div>
-            <div  class="commnet-right">
+            <div class="commnet-right">
               <div class="comment-cont">
                 <div class="comment-body">
                   <h5>
@@ -72,13 +75,13 @@
                       href="http://www.shukoe.com/"
                       target="_blank"
                       rel="nofollow"
-                      >{{item.Reply[0].autor}}</a
+                      >{{ item1.autor }}</a
                     >
                   </h5>
-                  @百万链：{{item.Reply[0].context}}
+                  @百万链：{{ item1.context }}
                 </div>
                 <p class="comment-info clearfix">
-                  <span class="float-left mr-small">{{item.Reply[0].times}}</span>
+                  <span class="float-left mr-small">{{ item1.times }}</span>
                 </p>
               </div>
             </div>
@@ -145,8 +148,8 @@ export default {
         mypage: "",
         context: ""
       },
-      indexs: "",//评论的位置
-      RelayArry:[],//获取到的用户的回复
+      indexs: "", //评论的位置
+      RelayArry: [] //获取到的用户的回复
     };
   },
   computed: {},
@@ -156,30 +159,27 @@ export default {
       this.axios
         .post(`${this.baseUrl}/comments/postComments`, {
           data: {
-            comment: [
-              {
-                userName: "longwei",
-                title: this.articleObj.title, //文章标题
-                types: this.articleObj.types, //文章类型,例如baidu,360,可能同时属于多个标签
-                idIndex: this.articleObj.idIndex, //文章id
-                tops: 0, //是否置顶，置顶1，不置顶0
-                show: 0, //是否显示，1为是，0为否
-                autor: this.commentList.autor, //用户名
-                headPic:
-                  "http://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?s=40&d=monsterid&r=g", //头像
-                mypage: this.commentList.mypage, //个人主页
-                mail: this.commentList.mail, //邮箱
-                times: "2012 04:56", //时间
-                context: this.commentList.context //内容
-              }
-            ]
+            ids: this.articleObj.id,
+            types: this.articleObj.types, //文章类型,例如baidu,360,可能同时属于多个标签
+            title: this.articleObj.title, //文章标题
+            list: {
+              idIndex: this.articleObj.idIndex, //文章id
+              tops: 0, //是否置顶，置顶1，不置顶0
+              show: 0, //是否显示，1为是，0为否
+              autor: this.commentList.autor, //用户名
+              headPic:
+                "http://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?s=40&d=monsterid&r=g", //头像
+              mypage: this.commentList.mypage, //个人主页
+              mail: this.commentList.mail, //邮箱
+              times: "2012 04:56", //时间
+              context: this.commentList.context //内容
+            }
           }
         })
         .then(res => {
-          // this.articleObj = res.data.resulet;
-          // // this.articleObj = res.data.result
-          // this.articleObj.Pageview = res.data.resulet.Pageview + 1;
-          // this.submit();
+          if (res.data.status == "0") {
+            this.$Message.success("发布成功，待审核");
+          }
         })
         .catch(err => {
           console.log("err", err);
@@ -189,15 +189,14 @@ export default {
     commentReply(index) {
       this.modalRelay = true;
       this.indexs = index;
-      // this.relaySubmit(idIndex)
     },
     // 提交回复
     relaySubmit() {
       this.axios
         .post(`${this.baseUrl}/comments/postRelay`, {
           data: {
-            base: { indexs: this.indexs }, //文章id},
-            relay: {
+            base: { indexs: this.indexs, ids: this.articleObj.id }, //文章id
+            Reply: {
               show: 0, //是否显示，1为是，0为否
               autor: this.Relaylist.autor, //用户名
               headPic:
@@ -211,7 +210,7 @@ export default {
         })
         .then(res => {
           if (res.data.status == "0") {
-            // this.$message.success("回复成功");
+           this.$Message.success("回复成功，待审核");
           }
         })
         .catch(err => {
@@ -221,35 +220,31 @@ export default {
     // 重置
     handleReset() {},
     // 获取评论
-    getComment(idIndex) {
+    getComment(ids) {
       this.axios
         .get(`${this.baseUrl}/comments/getComment`, {
           params: {
-            idIndex: idIndex
+            ids: ids
           }
         })
         .then(res => {
-          this.commentObj = res.data.resulet;
+          this.commentObj = res.data.resulet.list;
         })
         .catch(err => {
-          console.log("err", err);
+          
         });
     }
   },
-
+  beforeDestroy() {
+    Bus.$off("postArticleList");
+  },
   mounted() {
     // 接收
     Bus.$on("postArticleList", data => {
-      console.log(data, "传来的数据。。");
       this.articleObj = data;
       // 获取评论
-      this.getComment(this.articleObj.idIndex);
+      this.getComment(this.articleObj.id);
     });
-
-    //  this.getArticle(
-    //     this.$route.query.types,//大类
-    //     Number(this.$route.query.idIndex),//id标志
-    //   );
   }
 };
 </script>
