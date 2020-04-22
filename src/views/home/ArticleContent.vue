@@ -77,9 +77,6 @@ export default {
   },
   data() {
     return {
-      // isCollapsed: false,
-      // value3: 0,
-      // showArticle: false,
       articleObj: {},
       random: [],
       articleIndex: "",
@@ -103,7 +100,7 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.data, 9898989899898989898989);
+
           this.keepList = res.data.resulet;
         })
         .catch(err => {
@@ -111,7 +108,7 @@ export default {
         });
     },
     getArticle(types, idIndex) {
-      console.log(idIndex, 6666666);
+
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
           params: {
@@ -123,10 +120,10 @@ export default {
         .then(res => {
           this.articleObj = res.data.resulet;
          Bus.$emit("postArticleList",this.articleObj)
-          // this.articleObj = res.data.result
+
 
           this.articleObj.Pageview = res.data.resulet.Pageview + 1;
-          // this.submit();
+          this.submit();
         })
         .catch(err => {
           console.log("err", err);
@@ -137,10 +134,9 @@ export default {
       // 如果id存在就是修改，如果id不存在就是新增
       // 拼装article数据
       let article = {};
-      // this.articleObj.Pageview= this.articleObj.Pageview+1
       article[this.articleObj.types] = [this.articleObj];
       article[this.articleObj.types];
-      // console.log(article);
+
       this.axios
         .post(`${this.baseUrl}/articles/post`, {
           data: {
@@ -152,13 +148,13 @@ export default {
         })
         .then(res => {
           if (res.data.status == "0") {
-            // this.$message.success('发布成功');
+   
           } else {
-            // this.$message.error('发布失败' + res.data.msg);
+
           }
         })
         .catch(err => {
-          // this.$message.error('发布失败' + err);
+      
         });
     }
   },
@@ -167,9 +163,6 @@ export default {
       this.$route.query.types, //大类
       Number(this.$route.query.idIndex) //id标志
     );
-    // this.articleObj = JSON.parse(
-    //   decodeURIComponent(this.$route.query.articleObj)
-    // );
     this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre));
     this.getArticleKeep("baidu", "baidu1");
   }

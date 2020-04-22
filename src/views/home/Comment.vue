@@ -228,7 +228,10 @@ export default {
           }
         })
         .then(res => {
-          this.commentObj = res.data.resulet.list;
+           if (res.data.status == "0") {
+           this.commentObj = res.data.resulet.list;
+          }
+       
         })
         .catch(err => {
           
