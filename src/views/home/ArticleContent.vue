@@ -164,7 +164,7 @@ export default {
       Number(this.$route.query.idIndex) //id标志
     );
     this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre));
-    this.getArticleKeep("baidu", "baidu1");
+    this.getArticleKeep("tb", "tb1");
   }
 };
 </script>

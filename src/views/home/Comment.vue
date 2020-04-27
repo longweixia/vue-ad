@@ -37,7 +37,7 @@
         :key="index"
       >
         <a name="4499"></a>
-        <div class="clearfix">
+        <div class="clearfix" v-if="item.show">
           <div class="comment-left">
             <img :src="item.headPic" />
           </div>
@@ -63,7 +63,7 @@
           id="comment-4500"
         >
           <a name="4500"></a>
-          <div class="clearfix">
+          <div class="clearfix" v-if="item1.show">
             <div class="comment-left">
               <img :src="item1.headPic" />
             </div>
@@ -163,7 +163,7 @@ export default {
             types: this.articleObj.types, //文章类型,例如baidu,360,可能同时属于多个标签
             title: this.articleObj.title, //文章标题
             list: {
-              idIndex: this.articleObj.idIndex, //文章id
+              ids: this.articleObj.id, //文章id
               tops: 0, //是否置顶，置顶1，不置顶0
               show: 0, //是否显示，1为是，0为否
               autor: this.commentList.autor, //用户名
@@ -171,7 +171,7 @@ export default {
                 "http://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?s=40&d=monsterid&r=g", //头像
               mypage: this.commentList.mypage, //个人主页
               mail: this.commentList.mail, //邮箱
-              times: "2012 04:56", //时间
+              times: new Date, //时间
               context: this.commentList.context //内容
             }
           }

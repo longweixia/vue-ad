@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import Bus from "@/assets/event-bus.js";
 export default {
   name: "AdHeader",
   components: {},
@@ -39,29 +40,39 @@ export default {
           text: "首页导航"
         },
         {
-          name: "sougou",
+          name: "tb",
           type: "ios-keypad",
-          text: "搜狗联盟"
+          text: "淘宝赚"
         },
         {
-          name: "baidu",
+          name: "wx",
           type: "ios-analytics",
-          text: "百度联盟"
+          text: "微信赚"
         },
         {
-          name: "sanliuling",
+          name: "az",
           type: "ios-paper",
-          text: "360联盟"
+          text: "安卓赚"
         },
         {
-          name: "gogle",
+          name: "ios",
           type: "ios-paper",
-          text: "谷歌联盟"
+          text: "苹果(ios)赚"
         },
         {
-          name: "tuiguang",
+          name: "xb",
           type: "ios-paper",
-          text: "赚钱联盟"
+          text: "线报赚"
+        },
+        {
+          name: "gj",
+          type: "ios-paper",
+          text: "高级赚"
+        },
+        {
+          name: "cg",
+          type: "ios-paper",
+          text: "草根汇"
         }
       ]
     };
@@ -69,10 +80,10 @@ export default {
   methods: {
     getHeader(name) {
       // console.log(name);
-       this.$router.push({
-        path: "/home1"
-      });
-      this.$emit("getTypes",name)
+      //  this.$router.push({
+      //   path: "/home1"
+      // });
+      Bus.$emit("getTypes",name)
     }
   }
 };

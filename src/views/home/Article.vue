@@ -121,6 +121,9 @@ export default {
   },
   created() {
     this.getArticle("all");
+      Bus.$on("getTypes",data=>{
+  this.getArticle(data);
+  })
   }
 };
 </script>

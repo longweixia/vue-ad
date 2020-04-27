@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <AdHeader @getTypes="getTypes"></AdHeader>
+    <AdHeader></AdHeader>
     <Layout>
       <!-- <Sider
         breakpoint="md"
@@ -30,11 +30,17 @@
         <div slot="trigger"></div>
       </Sider> -->
       <Layout>
-        <AdBanner></AdBanner>
-        <AdTipRow></AdTipRow>
+        <AdBanner v-if="isBanner"></AdBanner>
+        <AdTipRow v-if="isAdTipRow"></AdTipRow>
        
         <Content :style="{ minHeight: '220px' }" class="ad-content">
           <div class="ad-content-div">
+            <!-- 文章提示说明 -->
+            <div class="article-tip">
+              <div v-show="adTip=='tb'" class="tips-text">
+                tb
+              </div>
+            </div>
             
                 <!-- {{articleList}}----- -->
                 <!-- 文章列表 -->
@@ -102,6 +108,9 @@ export default {
       showTips:false,//是否显示没有内容的提示
       articleLength:1,//文章长度
       nextPre:[],//上一篇下一篇文章
+      isBanner:true,//是否显示轮播
+      isAdTipRow:true,//是否显示提示
+      adTip:"",//展示栏对应的类别
       // articleIndex:1
     };
   },
@@ -111,23 +120,20 @@ export default {
     }
   },
   methods: {
-    // 子组件传来的点击每一项大类
-    getTypes(name){
-      this.getArticle(name)
-    },
+ 
    
   },
   mounted() {
-    // var mySwiper = new Swiper(".swiper-container", {
-    //   autoplay: true,
-    //   delay: 2000, //2秒切换一次
-    //   loop: true,
-    //   // 如果需要分页器
-    //   pagination: {
-    //     el: ".swiper-pagination"
-    //   }
-    // });
-    // 默认获取所有的文章
+  Bus.$on("getTypes",data=>{
+    this.adTip = data
+    if(data!="all"){
+      this.isBanner = false
+      this.isAdTipRow = false
+    }else{
+      this.isBanner = true
+      this.isAdTipRow = true
+    }
+  })
 
     
   }
