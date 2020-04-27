@@ -50,7 +50,7 @@
                 {{ item.context }}
               </div>
               <p class="comment-info clearfix">
-                <span class="float-left mr-small">{{ item.times }}</span
+                <span class="float-left mr-small">{{ item.times | formatDate}}</span
                 ><a @click="commentReply(index)">回复</a>
               </p>
             </div>
@@ -81,7 +81,7 @@
                   @百万链：{{ item1.context }}
                 </div>
                 <p class="comment-info clearfix">
-                  <span class="float-left mr-small">{{ item1.times }}</span>
+                  <span class="float-left mr-small">{{ item1.times | formatDate}}</span>
                 </p>
               </div>
             </div>
