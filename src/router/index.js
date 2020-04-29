@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home1 from '@/views/home/Home1'
 import ArticleContent from '@/views/home/ArticleContent'
 import Article from '@/views/home/Article'
+import Android from '@/views/home/Android'
 import GroupChart from '@/views/GroupChart/GroupChart'
 import Login from '@/views/login/Login'
 import WriteBaseInfo from '@/views/resume/WriteBaseInfo'
@@ -44,6 +45,11 @@ export default new Router({
             path: '/article',
             name: 'Article',
             component: Article
+        },
+        {
+            path: '/android',
+            name: 'Android',
+            component: Android
         },
         {
             path: '/login',
@@ -125,5 +131,14 @@ export default new Router({
             name: 'clubContent',
             component: ClubContent
         }
-    ]
+    ],
+    // 让打开页面，显示顶部
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+    }
+
 })

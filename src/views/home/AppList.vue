@@ -1,6 +1,6 @@
 <template>
   <div class="content-article">
-    <Home1>
+
       <div slot="article">
         <div v-if="showTips" class="ad-tips content-left">
           该分类下暂无数据，您可以查看其它分类
@@ -19,6 +19,8 @@
                 <div class="article-text">
                   <div class="article-title">
                     <a @click="gotoContent(item,index)">{{ item.title }}</a>
+                    <Rate disabled v-model="item.rateNum"/>
+                    <Button class="btn-downLoad" size="small" icon="ios-download-outline" type="primary">下载</Button>
                   </div>
                   <div class="list-text">
                     <VueMarkdown
@@ -30,6 +32,7 @@
                     <i class="page-top bg-danger">{{ item.tag }}</i>
                     <span class="float-left mr-small">{{ item.autor }}</span
                     >{{ item.times }}
+                    <span class="system-app">支持系统：{{item.system}}</span>
                   </div>
                 </div>
               </div>
@@ -37,7 +40,7 @@
           </div>
         </div>
       </div>
-    </Home1>
+  
   </div>
 </template>
 
@@ -46,7 +49,7 @@ import Home1 from "./Home1";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
-  name: "Article",
+  name: "AppList",
 
   props: [],
   components: { VueMarkdown, Home1 },
@@ -58,12 +61,14 @@ export default {
       articleIndex: 0,
       articleObj: [
         {
-          coverImage: "",
-          title: "",
-          content: "",
-          tag: "",
-          autor: "",
-          times: ""
+          coverImage: "http://47.103.40.123:3001/images/coverImg/timg.jpg",
+          title: "松鼠网",
+          content: "阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛。",
+          tag: "顶",
+          rateNum:5,
+          system:"安卓苹果",
+          autor: "轻赚网",
+          times: "2019/09/20"
         }
       ]
     };
@@ -86,7 +91,7 @@ export default {
           res.data.resulet.length > 0
             ? (this.showTips = false)
             : (this.showTips = true);
-          this.articleObj = res.data.resulet;
+          // this.articleObj = res.data.resulet;
           console.log(this.articleObj, "打印文章数据");
         })
         .catch(err => {
@@ -261,5 +266,11 @@ export default {
 
     // }
   }
+}
+.system-app{
+  margin-left: 20px!important;
+}
+.btn-downLoad{
+  float: right;
 }
 </style>

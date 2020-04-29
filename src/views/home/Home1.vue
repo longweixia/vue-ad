@@ -32,36 +32,76 @@
       <Layout>
         <AdBanner v-if="isBanner"></AdBanner>
         <AdTipRow v-if="isAdTipRow"></AdTipRow>
-       
+
         <Content :style="{ minHeight: '220px' }" class="ad-content">
           <div class="ad-content-div">
             <!-- 文章提示说明 -->
             <div class="article-tip">
-              <div v-show="adTip=='tb'" class="tips-text">
-                tb
-              </div>
-            </div>
-            
-                <!-- {{articleList}}----- -->
-                <!-- 文章列表 -->
-                <slot name="article"></slot>
-                <slot name="articleContent"></slot>
-
-                <!-- <div v-if="!showTips">
-
-                  <Article v-for="(item,index) in articleList" :key="index" 
-                  :articleIndex="index" :articleObj="articleList"></Article>
+              <!-- 显示按钮，不为all的时候才显示 -->
+              <Button
+                size="small"
+                :icon="closeBtn"
+                v-show="adTip != 'all'"
+                class="show-tips"
+                @click="openTip"
+                type="success"
+                ghost
+                >{{ tipBtnText }}</Button
+              >
+              <div v-show="adTipTerm == 'tb'" class="tips-text">
+                <div class="tip-title1">淘宝赚：这其中主要是两个板块</div>
+                <div class="tip-title2">1.淘宝刷单：
+                  <div class="tip-title3">
+                    (1)对接商家
+                    <div class="tip-context">
+                      这种一般是立返的，直接跟商家沟通，由商家来放单，一般是刷手付款后，商家直接转本金和佣金给刷手
+                      <!-- 优缺点 -->
+                      <div class="advantage-defect">
+                        <!-- 优点 -->
+                        <div>
+                          <Tag color="success">优点</Tag>：
+                          <span>返款非常快；沟通畅通；佣金高(通常有5%的佣金)</span>
+                        </div>
+                        <!-- 缺点 -->
+                        <div>
+                          <Tag color="magenta">缺点</Tag>：
+                          <span>单量很少；放单不稳定；</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tip-title3">
+                    (2)对接平台
+                    <div class="tip-context">
+                      这种一般是货返的，用户在平台上找到对应的商品，然后按照描述要求进行操作，去淘宝下单-支付，将订单号填写到平台。
+                      当商品发货后，商家会把钱转到平台，平台再把钱放到用户账户上；刷手收货评价后，将评价反馈到平台后，平台会往用户账户打款
+                      佣金，然后用户再将钱提现到自己的银行卡。
+                      <!-- 优缺点 -->
+                      <div class="advantage-defect">
+                        <!-- 优点 -->
+                        <div>
+                          <Tag color="success">优点</Tag>：
+                          <span>返款非常快；沟通畅通；佣金高(通常有5%的佣金)</span>
+                        </div>
+                        <!-- 缺点 -->
+                        <div>
+                          <Tag color="magenta">缺点</Tag>：
+                          <span>回款周期较长(最长48小时)；需要垫付；</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                 <div v-if="showTips" class="ad-tips">
-                   该分类下暂无数据，您可以查看其它分类
-                 </div> -->
-                <!-- <div vif="showArticle">
-                  <ArticleContent></ArticleContent>
-                </div> -->
-                <!-- <div>
-               <VueMarkdown :source="articleList"></VueMarkdown>
-                </div> -->
-             
+                 <div class="tip-title2">2.淘宝返利：</div>
+              </div>
+               <div v-show="adTipTerm == 'wx'" class="tips-text">wx</div>
+            </div>
+
+            <!-- {{articleList}}----- -->
+            <!-- 文章列表 -->
+            <slot name="article"></slot>
+            <slot name="articleContent"></slot>
+            <slot name="android"></slot>
             <div>
               <ArticleRight></ArticleRight>
             </div>
@@ -101,17 +141,20 @@ export default {
     return {
       isCollapsed: false,
       value3: 0,
-
-      showArticle: false,
+      // showArticle: false,
       articleList: [],
       // random:[],//随机文章
-      showTips:false,//是否显示没有内容的提示
-      articleLength:1,//文章长度
-      nextPre:[],//上一篇下一篇文章
-      isBanner:true,//是否显示轮播
-      isAdTipRow:true,//是否显示提示
-      adTip:"",//展示栏对应的类别
-      // articleIndex:1
+      showTips: false, //是否显示没有内容的提示
+      articleLength: 1, //文章长度
+      nextPre: [], //上一篇下一篇文章
+      isBanner: true, //是否显示轮播
+      isAdTipRow: true, //是否显示提示
+      adTip: "all", //展示栏对应的类别
+      adTipTerm:"",//判断点击的模块
+      flagTip:false,//判断的点击是关闭还是开启
+      tipBtnText:"显示提示",
+      closeBtn:"ios-arrow-down"
+     
     };
   },
   computed: {
@@ -120,22 +163,45 @@ export default {
     }
   },
   methods: {
- 
-   
+    openTip(){
+      this.flagTip=!this.flagTip;
+      if(this.flagTip){
+        this.adTipTerm=this.adTip
+        this.tipBtnText="关闭提示"
+        this.closeBtn="ios-arrow-up"
+      }else{
+        this.adTipTerm=""
+        this.tipBtnText="打开提示"
+        this.closeBtn="ios-arrow-down"
+      }
+    }
   },
   mounted() {
-  Bus.$on("getTypes",data=>{
-    this.adTip = data
-    if(data!="all"){
-      this.isBanner = false
-      this.isAdTipRow = false
-    }else{
-      this.isBanner = true
-      this.isAdTipRow = true
-    }
-  })
-
-    
+    Bus.$on("getTypes", data => {
+      if(data=="az"){
+        this.isBanner = false
+        this.$router.push({
+          path:"/android",
+          query:{}
+        })
+        return false
+      }
+      // else{
+      //      this.$router.push({
+      //     path:"/article",
+      //     query:{}
+      //   })
+      // }
+      this.adTip = data;
+      this.adTipTerm=""
+      // if (data != "all") {
+      //   this.isBanner = false;
+      //   this.isAdTipRow = false;
+      // } else {
+      //   this.isBanner = true;
+      //   this.isAdTipRow = true;
+      // }
+    });
   }
 };
 </script>
@@ -201,7 +267,6 @@ export default {
 // .index-brand {
 //     display: none;
 // }
-
 
 // 内容区
 .ad-content {
@@ -273,7 +338,7 @@ export default {
 // .ad-none {
 //   display: none !important;
 // }
-.ad-tips{
+.ad-tips {
   text-align: center;
 }
 </style>

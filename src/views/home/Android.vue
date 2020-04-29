@@ -6,35 +6,57 @@
           该分类下暂无数据，您可以查看其它分类
         </div>
         <div v-if="!showTips" class="ad-content-left">
-          <div >
-            <div class="content-box" v-for="(item, index) in articleObj" :key="index">
-              <div class="article-left">
-                <a @click="gotoContent(iitem,index)" class="page-img"
-                  ><img
-                    :src="item.coverImage"
-                    alt="内容无法展示..."
-                /></a>
-              </div>
-              <div class="article-right">
-                <div class="article-text">
-                  <div class="article-title">
-                    <a @click="gotoContent(item,index)">{{ item.title }}</a>
+          <Tabs>
+            <TabPane label="优质文章" icon="logo-apple">
+              <div>
+                <div
+                  class="content-box"
+                  v-for="(item, index) in articleObj"
+                  :key="index"
+                >
+                  <div class="article-left">
+                    <a @click="gotoContent(iitem, index)" class="page-img"
+                      ><img :src="item.coverImage" alt="内容无法展示..."
+                    /></a>
                   </div>
-                  <div class="list-text">
-                    <VueMarkdown
-                      class="content-page"
-                      :source="item.content"
-                    ></VueMarkdown>
-                  </div>
-                  <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}</i>
-                    <span class="float-left mr-small">{{ item.autor }}</span
-                    >{{ item.times }}
+                  <div class="article-right">
+                    <div class="article-text">
+                      <div class="article-title">
+                        <a @click="gotoContent(item, index)">{{
+                          item.title
+                        }}</a>
+                      </div>
+                      <div class="list-text">
+                        <VueMarkdown
+                          class="content-page"
+                          :source="item.content"
+                        ></VueMarkdown>
+                      </div>
+                      <div class="list-meta">
+                        <i class="page-top bg-danger">{{ item.tag }}</i>
+                        <span class="float-left mr-small">{{ item.autor }}</span
+                        >{{ item.times }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </TabPane>
+            <TabPane label="软件列表" icon="logo-windows">
+              <span
+                v-for="(item, index) in sorTagtList"
+                :key="index"
+                @click="changeTag(index)"
+                :class="item.tagClass"
+                class="tagFault"
+                >{{ item.text }}</span
+              >
+              <!-- 软件列表 -->
+              <div class="applist">
+                <AppList></AppList>
+              </div>
+            </TabPane>
+          </Tabs>
         </div>
       </div>
     </Home1>
@@ -43,13 +65,14 @@
 
 <script>
 import Home1 from "./Home1";
+import AppList from "./AppList";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
-  name: "Article",
+  name: "Android",
 
   props: [],
-  components: { VueMarkdown, Home1 },
+  components: { VueMarkdown, Home1, AppList },
   data() {
     return {
       articleList: [],
@@ -65,11 +88,25 @@ export default {
           autor: "",
           times: ""
         }
+      ],
+      sorTagtList: [
+        { checkable: true, tagClass: "tagClassCheck", text: "全部" },
+        { checkable: false, tagClass: "tagClass", text: "阅读赚钱" },
+        { checkable: false, tagClass: "tagClass", text: "视频赚钱" }
       ]
     };
   },
   computed: {},
   methods: {
+    // 选中tag
+    changeTag(index) {
+      this.sorTagtList.forEach((item, index) => {
+        item.checkable = false;
+        item.tagClass = "tagClass";
+      });
+      this.sorTagtList[index].tagClass = "tagClassCheck";
+      this.sorTagtList[index].checkable = true;
+    },
     getArticle(flag) {
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
@@ -94,36 +131,45 @@ export default {
         });
     },
     // 进入文章详情
-    gotoContent(item,index) {
+    gotoContent(item, index) {
       //拼装上一页，下一页数据
-      let nextidIndex=this.articleObj[index-1]?this.articleObj[index-1].idIndex:-1
-        let  nextname=this.articleObj[index-1]?this.articleObj[index-1].title:-1
-       let  preidIndex=this.articleObj[index+1]?this.articleObj[index+1].idIndex:-1
-         let prename=this.articleObj[index+1]?this.articleObj[index+1].title:-1
-         let nextPre={
-           nextidIndex:nextidIndex,
-           nextname:nextname,
-           preidIndex:preidIndex,
-           prename:prename,
-         }
-        this.$router.push({
-          path: "/articleContent",
-          query: {
-            // vue路由传对象刷新会报错，数据丢失，用json字符串解决
-            // articleObj:encodeURIComponent(JSON.stringify(item)),
-            idIndex:this.articleObj[index].idIndex,
-            types:this.articleObj[index].types,
+      let nextidIndex = this.articleObj[index - 1]
+        ? this.articleObj[index - 1].idIndex
+        : -1;
+      let nextname = this.articleObj[index - 1]
+        ? this.articleObj[index - 1].title
+        : -1;
+      let preidIndex = this.articleObj[index + 1]
+        ? this.articleObj[index + 1].idIndex
+        : -1;
+      let prename = this.articleObj[index + 1]
+        ? this.articleObj[index + 1].title
+        : -1;
+      let nextPre = {
+        nextidIndex: nextidIndex,
+        nextname: nextname,
+        preidIndex: preidIndex,
+        prename: prename
+      };
+      this.$router.push({
+        path: "/articleContent",
+        query: {
+          // vue路由传对象刷新会报错，数据丢失，用json字符串解决
+          // articleObj:encodeURIComponent(JSON.stringify(item)),
+          idIndex: this.articleObj[index].idIndex,
+          types: this.articleObj[index].types,
 
-            nextPre:encodeURIComponent(JSON.stringify(nextPre))//上一页下一页数据
-          }
-        });
+          nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
+        }
+      });
     }
   },
-  created() {
+  mounted() {
+    Bus.$emit("hiddenBanner");
     this.getArticle("all");
-      Bus.$on("getTypes",data=>{
-  this.getArticle(data);
-  })
+    Bus.$on("getTypes", data => {
+      this.getArticle(data);
+    });
   }
 };
 </script>
@@ -261,5 +307,21 @@ export default {
 
     // }
   }
+}
+.tagFault{
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+}
+.tagClass{
+  background: #f7f7f7;
+}
+.tagClassCheck{
+  background: #2d8cf0;
+  color: #fff;
+}
+.applist{
+  margin-top: 10px;
 }
 </style>

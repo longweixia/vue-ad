@@ -1,37 +1,41 @@
 <template>
-       <div class="index-brand">
-          <div class="ad-content-top">
-            <Row type="flex">
-              <Col span="6" order="4" class="ad-col last-ad-col">
-                <h3>全新首页，二次知识革命</h3>
-                <span>十年磨一剑，未来的路还远</span></Col
-              >
-              <Col span="6" order="3" class="ad-col">
-                <h3>资源整合，助力个人站长</h3>
-                <span>庐山真面目，分享业界资讯</span></Col
-              >
-              <Col span="6" order="2" class="ad-col">
-                <h3>宾至如归，只为你的体验</h3>
-                <span>谈笑有鸿儒，广告联盟赚钱</span></Col
-              >
-              <Col span="6" order="1" class="ad-col">
-                <h3>踌躇满志，赋能新的方向</h3>
-                <span>行行出状元，专注广告联盟</span>
-              </Col>
-            </Row>
-          </div>
-    
+  <div class="index-brand" v-show="show">
+    <div class="ad-content-top">
+      <Row type="flex">
+        <Col span="6" order="4" class="ad-col last-ad-col">
+          <h3>全新首页，二次知识革命</h3>
+          <span>十年磨一剑，未来的路还远</span></Col
+        >
+        <Col span="6" order="3" class="ad-col">
+          <h3>资源整合，助力个人站长</h3>
+          <span>庐山真面目，分享业界资讯</span></Col
+        >
+        <Col span="6" order="2" class="ad-col">
+          <h3>宾至如归，只为你的体验</h3>
+          <span>谈笑有鸿儒，广告联盟赚钱</span></Col
+        >
+        <Col span="6" order="1" class="ad-col">
+          <h3>踌躇满志，赋能新的方向</h3>
+          <span>行行出状元，专注广告联盟</span>
+        </Col>
+      </Row>
+    </div>
   </div>
 </template>
 <script>
+import Bus from "@/assets/event-bus.js";
 export default {
   name: "AdTipRow",
   components: {},
   data() {
-    return {};
+    return {
+      show: true
+    };
   },
-  mounted(){
-
+  mounted() {
+    Bus.$on("hiddenBanner", data => {
+      this.show = false;
+    });
   }
 };
 </script>

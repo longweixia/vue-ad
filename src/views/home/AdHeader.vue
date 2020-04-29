@@ -84,6 +84,7 @@ export default {
       //   path: "/home1"
       // });
       Bus.$emit("getTypes",name)
+          Bus.$emit('hiddenBanner')
     }
   }
 };

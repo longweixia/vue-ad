@@ -62,7 +62,7 @@
 
 <script>
 import Home1 from "./Home1";
-import ArticleBottom from "./ArticleBottom";
+// import ArticleBottom from "./ArticleBottom";
 import Comment from "./Comment";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
@@ -70,7 +70,7 @@ export default {
   name: "ArticleContent",
   components: {
     Home1,
-    ArticleBottom,
+    // ArticleBottom,
 
     VueMarkdown,
     Comment
@@ -159,6 +159,7 @@ export default {
     }
   },
   mounted() {
+    Bus.$emit('hiddenBanner')
     this.getArticle(
       this.$route.query.types, //大类
       Number(this.$route.query.idIndex) //id标志
