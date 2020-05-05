@@ -41,14 +41,15 @@
               <Button
                 size="small"
                 :icon="closeBtn"
-                v-show="adTip != 'all'"
+                v-show="adTip != 'all'&adTip != 'az'&adTip != 'content'"
                 class="show-tips"
                 @click="openTip"
                 type="success"
                 ghost
                 >{{ tipBtnText }}</Button
               >
-              <div v-show="adTipTerm == 'tb'" class="tips-text">
+              <div v-show="adTip == 'tb'" class="tips-text">
+                <div v-if="flagTip">
                 <div class="tip-title1">淘宝赚：这其中主要是两个板块</div>
                 <div class="tip-title2">1.淘宝刷单：
                   <div class="tip-title3">
@@ -94,7 +95,10 @@
                 </div>
                  <div class="tip-title2">2.淘宝返利：</div>
               </div>
-               <div v-show="adTipTerm == 'wx'" class="tips-text">wx</div>
+              </div>
+               <div v-show="adTip == 'wx'" class="tips-text">
+                   <div v-if="flagTip">wx</div>
+               </div>
             </div>
 
             <!-- {{articleList}}----- -->
@@ -137,6 +141,17 @@ export default {
     AdFooter,
     ArticleRight
   },
+  props:{
+    isBanner:{
+      default:true
+    },
+    isAdTipRow:{
+      default:true
+    },
+    adTip:{
+      default:"all"
+    },
+  },
   data() {
     return {
       isCollapsed: false,
@@ -147,10 +162,10 @@ export default {
       showTips: false, //是否显示没有内容的提示
       articleLength: 1, //文章长度
       nextPre: [], //上一篇下一篇文章
-      isBanner: true, //是否显示轮播
-      isAdTipRow: true, //是否显示提示
-      adTip: "all", //展示栏对应的类别
-      adTipTerm:"",//判断点击的模块
+      // isBanner: true, //是否显示轮播
+      // isAdTipRow: true, //是否显示提示
+      // adTip: "all", //展示栏对应的类别
+      // adTipTerm:"",//判断点击的模块
       flagTip:false,//判断的点击是关闭还是开启
       tipBtnText:"显示提示",
       closeBtn:"ios-arrow-down"
@@ -166,42 +181,42 @@ export default {
     openTip(){
       this.flagTip=!this.flagTip;
       if(this.flagTip){
-        this.adTipTerm=this.adTip
+        // this.adTipTerm=this.adTip
         this.tipBtnText="关闭提示"
         this.closeBtn="ios-arrow-up"
       }else{
-        this.adTipTerm=""
+        // this.adTipTerm=""
         this.tipBtnText="打开提示"
         this.closeBtn="ios-arrow-down"
       }
     }
   },
   mounted() {
-    Bus.$on("getTypes", data => {
-      if(data=="az"){
-        this.isBanner = false
-        this.$router.push({
-          path:"/android",
-          query:{}
-        })
-        return false
-      }
-      // else{
-      //      this.$router.push({
-      //     path:"/article",
-      //     query:{}
-      //   })
-      // }
-      this.adTip = data;
-      this.adTipTerm=""
-      // if (data != "all") {
-      //   this.isBanner = false;
-      //   this.isAdTipRow = false;
-      // } else {
-      //   this.isBanner = true;
-      //   this.isAdTipRow = true;
-      // }
-    });
+    // Bus.$on("getTypes", data => {
+    //   if(data=="az"){
+    //     this.isBanner = false
+    //     this.$router.push({
+    //       path:"/android",
+    //       query:{}
+    //     })
+    //     return false
+    //   }
+    //   // else{
+    //   //      this.$router.push({
+    //   //     path:"/article",
+    //   //     query:{}
+    //   //   })
+    //   // }
+    //   this.adTip = data;
+    //   this.adTipTerm=""
+    //   // if (data != "all") {
+    //   //   this.isBanner = false;
+    //   //   this.isAdTipRow = false;
+    //   // } else {
+    //   //   this.isBanner = true;
+    //   //   this.isAdTipRow = true;
+    //   // }
+    // });
   }
 };
 </script>
@@ -340,5 +355,26 @@ export default {
 // }
 .ad-tips {
   text-align: center;
+}
+.tp-text{
+  margin: 20px 0 20px 10px;
+  .tip-title1{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  tip-title2{
+    margin-left: 10px;
+    font-size: 16px;
+    .tip-title3{
+      margin-left: 10px;
+      font-size: 14px;
+      .tip-context{
+margin-left: 10px;
+      }
+    }
+  }
+}
+.show-tips{
+  margin: 10px;
 }
 </style>

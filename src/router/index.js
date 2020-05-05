@@ -4,6 +4,8 @@ import Home1 from '@/views/home/Home1'
 import ArticleContent from '@/views/home/ArticleContent'
 import Article from '@/views/home/Article'
 import Android from '@/views/home/Android'
+import Taobao from '@/views/home/Taobao'
+import AppDetail from '@/views/home/AppDetail'
 import GroupChart from '@/views/GroupChart/GroupChart'
 import Login from '@/views/login/Login'
 import WriteBaseInfo from '@/views/resume/WriteBaseInfo'
@@ -50,6 +52,16 @@ export default new Router({
             path: '/android',
             name: 'Android',
             component: Android
+        },
+        {
+            path: '/taobao',
+            name: 'Taobao',
+            component: Taobao
+        },
+        {
+            path: '/appDetail',
+            name: 'AppDetail',
+            component: AppDetail
         },
         {
             path: '/login',

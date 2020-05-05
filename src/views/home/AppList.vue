@@ -1,46 +1,55 @@
 <template>
   <div class="content-article">
-
-      <div slot="article">
-        <div v-if="showTips" class="ad-tips content-left">
-          该分类下暂无数据，您可以查看其它分类
-        </div>
-        <div v-if="!showTips" class="ad-content-left">
-          <div >
-            <div class="content-box" v-for="(item, index) in articleObj" :key="index">
-              <div class="article-left">
-                <a @click="gotoContent(iitem,index)" class="page-img"
-                  ><img
-                    :src="item.coverImage"
-                    alt="内容无法展示..."
-                /></a>
-              </div>
-              <div class="article-right">
-                <div class="article-text">
-                  <div class="article-title">
-                    <a @click="gotoContent(item,index)">{{ item.title }}</a>
-                    <Rate disabled v-model="item.rateNum"/>
-                    <Button class="btn-downLoad" size="small" icon="ios-download-outline" type="primary">下载</Button>
-                  </div>
-                  <div class="list-text">
-                    <VueMarkdown
-                      class="content-page"
-                      :source="item.content"
-                    ></VueMarkdown>
-                  </div>
-                  <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}</i>
-                    <span class="float-left mr-small">{{ item.autor }}</span
-                    >{{ item.times }}
-                    <span class="system-app">支持系统：{{item.system}}</span>
-                  </div>
+    <div slot="article">
+      <div v-if="showTips" class="ad-tips content-left">
+        该分类下暂无数据，您可以查看其它分类
+      </div>
+      <div v-if="!showTips" class="ad-content-left">
+        <div>
+          <div
+            class="content-box"
+            v-for="(item, index) in appArry"
+            :key="index"
+          >
+            <div class="article-left">
+              <a @click="gotoContent(iitem, index)" class="page-img"
+                ><img :src="item.coverImage" alt="内容无法展示..."
+              /></a>
+            </div>
+            <div class="article-right">
+              <div class="article-text">
+                <div class="article-title">
+                  <a @click="gotoContent(item, index)">{{ item.name }}</a>
+                  <Rate disabled v-model="item.rate" />
+                  <Button
+                    class="btn-downLoad"
+                    size="small"
+                    icon="ios-download-outline"
+                    type="primary"
+                    >下载</Button
+                  >
+                </div>
+                <div class="list-text">
+                  <VueMarkdown
+                    class="content-page"
+                    :source="item.content"
+                  ></VueMarkdown>
+                </div>
+                <div class="list-meta">
+                  <i class="page-top bg-danger">{{ item.tag }}</i>
+                  <span class="float-left mr-small">{{ item.autor }}</span
+                  >{{ item.times }}
+                  <span class="system-app">支持系统：{{ item.system }}</span>
+                  <span class="system-app"
+                    >下载次数：{{ item.downLoadNum }}</span
+                  >
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-  
+    </div>
   </div>
 </template>
 
@@ -51,7 +60,7 @@ import Bus from "@/assets/event-bus.js";
 export default {
   name: "AppList",
 
-  props: [],
+  props: ["appArry"],
   components: { VueMarkdown, Home1 },
   data() {
     return {
@@ -63,12 +72,14 @@ export default {
         {
           coverImage: "http://47.103.40.123:3001/images/coverImg/timg.jpg",
           title: "松鼠网",
-          content: "阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛。",
+          content:
+            "阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛。",
           tag: "顶",
-          rateNum:5,
-          system:"安卓苹果",
+          rateNum: 5,
+          system: "安卓苹果",
           autor: "轻赚网",
-          times: "2019/09/20"
+          times: "2019/09/20",
+          downLoadNum: 365
         }
       ]
     };
@@ -99,36 +110,44 @@ export default {
         });
     },
     // 进入文章详情
-    gotoContent(item,index) {
+    gotoContent(item, index) {
       //拼装上一页，下一页数据
-      let nextidIndex=this.articleObj[index-1]?this.articleObj[index-1].idIndex:-1
-        let  nextname=this.articleObj[index-1]?this.articleObj[index-1].title:-1
-       let  preidIndex=this.articleObj[index+1]?this.articleObj[index+1].idIndex:-1
-         let prename=this.articleObj[index+1]?this.articleObj[index+1].title:-1
-         let nextPre={
-           nextidIndex:nextidIndex,
-           nextname:nextname,
-           preidIndex:preidIndex,
-           prename:prename,
-         }
-        this.$router.push({
-          path: "/articleContent",
-          query: {
-            // vue路由传对象刷新会报错，数据丢失，用json字符串解决
-            // articleObj:encodeURIComponent(JSON.stringify(item)),
-            idIndex:this.articleObj[index].idIndex,
-            types:this.articleObj[index].types,
+      // let nextidIndex = this.articleObj[index - 1]
+      //   ? this.articleObj[index - 1].idIndex
+      //   : -1;
+      // let nextname = this.articleObj[index - 1]
+      //   ? this.articleObj[index - 1].title
+      //   : -1;
+      // let preidIndex = this.articleObj[index + 1]
+      //   ? this.articleObj[index + 1].idIndex
+      //   : -1;
+      // let prename = this.articleObj[index + 1]
+      //   ? this.articleObj[index + 1].title
+      //   : -1;
+      // let nextPre = {
+      //   nextidIndex: nextidIndex,
+      //   nextname: nextname,
+      //   preidIndex: preidIndex,
+      //   prename: prename
+      // };
+      this.$router.push({
+        path: "/appDetail",
+        query: {
+          // // vue路由传对象刷新会报错，数据丢失，用json字符串解决
+          // // articleObj:encodeURIComponent(JSON.stringify(item)),
+          // idIndex: this.articleObj[index].idIndex,
+          // types: this.articleObj[index].types,
 
-            nextPre:encodeURIComponent(JSON.stringify(nextPre))//上一页下一页数据
-          }
-        });
+          // nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
+        }
+      });
     }
   },
   created() {
-    this.getArticle("all");
-      Bus.$on("getTypes",data=>{
-  this.getArticle(data);
-  })
+    // this.getArticle("all");
+    // Bus.$on("getTypes", data => {
+    //   this.getArticle(data);
+    // });
   }
 };
 </script>
@@ -267,10 +286,15 @@ export default {
     // }
   }
 }
-.system-app{
-  margin-left: 20px!important;
+.system-app {
+  margin-left: 20px !important;
 }
-.btn-downLoad{
+.btn-downLoad {
   float: right;
+}
+.ad-tips {
+  font-size: 18px;
+  margin-top: 20px;
+  text-align: center;
 }
 </style>

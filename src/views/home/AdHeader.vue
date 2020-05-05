@@ -7,10 +7,10 @@
           <MenuItem
             v-for="(item, index) in headerList"
             :key="index"
-            :name="item.name" 
-          ><div class="header-type" @click="getHeader(item.name)">
-            <Icon :type="item.type"></Icon>
-            {{ item.text }}
+            :name="item.name"
+            ><div class="header-type" @click="getHeader(item.name)">
+              <Icon :type="item.type"></Icon>
+              {{ item.text }}
             </div>
           </MenuItem>
 
@@ -79,12 +79,36 @@ export default {
   },
   methods: {
     getHeader(name) {
-      // console.log(name);
-      //  this.$router.push({
-      //   path: "/home1"
-      // });
-      Bus.$emit("getTypes",name)
-          Bus.$emit('hiddenBanner')
+      if (name == "az") {
+        this.$router.push({
+          path: "./android",
+          query: {}
+        });
+      } 
+      else if (name == "all") {
+        this.$router.push({
+          path: "./",
+          query: {}
+        });
+      }
+      else if (name == "tb") {
+        this.$router.push({
+          path: "./taobao",
+          query: {}
+        });
+      }
+      else
+      {
+        this.$router.push({
+          path: "./",
+          query: {
+            type:name
+          }
+        });
+      }
+
+      Bus.$emit("getTypes", name);
+      Bus.$emit("hiddenBanner");
     }
   }
 };
@@ -94,10 +118,10 @@ export default {
 .layout {
   height: 60px;
 }
-/deep/ .ivu-menu-item{
+/deep/ .ivu-menu-item {
   cursor: text;
 }
-.header-type{
+.header-type {
   cursor: pointer;
 }
 // .layout-header-bar {

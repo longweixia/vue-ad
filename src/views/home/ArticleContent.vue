@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <Home1>
+    <Home1 :isBanner="false" :isAdTipRow="false" adTip="content">
       <Content
         slot="articleContent"
         :style="{ minHeight: '220px' }"
@@ -159,7 +159,7 @@ export default {
     }
   },
   mounted() {
-    Bus.$emit('hiddenBanner')
+    // Bus.$emit('hiddenBanner')
     this.getArticle(
       this.$route.query.types, //大类
       Number(this.$route.query.idIndex) //id标志

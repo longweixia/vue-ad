@@ -1,5 +1,5 @@
 <template>
-  <div class="layout" v-show="show">
+  <div class="layout">
     <Header class="layout-header-bar">
       <div class="zm-banner">
         <div class="swiper-container">
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       bannerData: [],
-      show: true
+ 
     };
   },
   methods: {
@@ -64,9 +64,7 @@ export default {
     }
   },
   mounted() {
-    Bus.$on("hiddenBanner", data => {
-      this.show = false;
-    });
+ 
     var mySwiper = new Swiper(".swiper-container", {
       autoplay: true,
       delay: 2000, //2秒切换一次

@@ -1,14 +1,11 @@
 <template>
   <div class="content-article">
-    <Home1>
+    <Home1 :isBanner="false" :isAdTipRow="false" adTip="az">
       <div slot="article">
-        <div v-if="showTips" class="ad-tips content-left">
-          该分类下暂无数据，您可以查看其它分类
-        </div>
-        <div v-if="!showTips" class="ad-content-left">
+        <div class="ad-content-left">
           <Tabs>
             <TabPane label="优质文章" icon="logo-apple">
-              <div>
+              <div v-if="!showTips">
                 <div
                   class="content-box"
                   v-for="(item, index) in articleObj"
@@ -40,6 +37,9 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div v-if="showTips" class="ad-tips content-left">
+                该分类下暂无数据，您可以查看其它分类
               </div>
             </TabPane>
             <TabPane label="软件列表" icon="logo-windows">
@@ -165,11 +165,11 @@ export default {
     }
   },
   mounted() {
-    Bus.$emit("hiddenBanner");
-    this.getArticle("all");
-    Bus.$on("getTypes", data => {
-      this.getArticle(data);
-    });
+    // Bus.$emit("hiddenBanner");
+    this.getArticle("az");
+    // Bus.$on("getTypes", data => {
+    //   this.getArticle(data);
+    // });
   }
 };
 </script>
@@ -308,20 +308,20 @@ export default {
     // }
   }
 }
-.tagFault{
+.tagFault {
   padding: 5px;
   border-radius: 3px;
   border: none;
   cursor: pointer;
 }
-.tagClass{
+.tagClass {
   background: #f7f7f7;
 }
-.tagClassCheck{
+.tagClassCheck {
   background: #2d8cf0;
   color: #fff;
 }
-.applist{
+.applist {
   margin-top: 10px;
 }
 </style>

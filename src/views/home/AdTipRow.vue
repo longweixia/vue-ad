@@ -1,5 +1,5 @@
 <template>
-  <div class="index-brand" v-show="show">
+  <div class="index-brand">
     <div class="ad-content-top">
       <Row type="flex">
         <Col span="6" order="4" class="ad-col last-ad-col">
@@ -29,13 +29,10 @@ export default {
   components: {},
   data() {
     return {
-      show: true
     };
   },
   mounted() {
-    Bus.$on("hiddenBanner", data => {
-      this.show = false;
-    });
+
   }
 };
 </script>
