@@ -66,8 +66,17 @@ module.exports = {
         }
       },
       {
-        test: /.md$/,
-        loader: "text-loader"
+        test: /\.md$/,
+        use: [
+          {
+            loader: "html-loader"
+          },
+          {
+            loader: "markdown-loader",
+            options: {
+            }
+          }
+        ]
     }
     ]
   },

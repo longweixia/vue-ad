@@ -41,7 +41,7 @@
               <Button
                 size="small"
                 :icon="closeBtn"
-                v-show="adTip != 'all'&adTip != 'az'&adTip != 'content'"
+                v-show="adTip != 'all'&adTip != 'az'&adTip != 'content'&adTip != 'appDetail'"
                 class="show-tips"
                 @click="openTip"
                 type="success"

@@ -2,167 +2,129 @@
   <div class="content-article">
     <Home1 :isBanner="false" :isAdTipRow="false" :adTip="adTip">
       <div slot="article">
-        <Breadcrumb>
-          <BreadcrumbItem to="/">
-            <Icon type="ios-home-outline"></Icon> 首页
-          </BreadcrumbItem>
-          <BreadcrumbItem to="TemplateMall">
-            <Icon type="logo-buffer"></Icon> 模板商城
-          </BreadcrumbItem>
-        </Breadcrumb>
+      <MyBreadcrumb :getRouter="getRouter" :title1="title1" :title2="title2" :icon1="icon1" :icon2="icon2"></MyBreadcrumb>
         <div v-if="showTips" class="ad-tips content-left ad-content-left">
           该分类下暂无数据，您可以查看其它分类
         </div>
         <div v-if="!showTips" class="ad-content-left">
-          <div>
-            <div
-              class="content-box"
-              v-for="(item, index) in articleObj"
-              :key="index"
-            >
-              <div class="detail-box Top_info info_L">
-                <div class="Top_info info_L">
-                  <div class="info">
-                    <div class="img bt">
-                      <img
-                        src="https://www.app522.com/upload/img/2019/10/09/5d9dcf9c4a336.jpg"
-                        alt="惠人赚"
-                      />
-                      <h1>惠人赚</h1>
-                    </div>
-                    <div class="info_cent">
-                      <ul >
-                        <li v-for="(item, index) in tagList" :key="index">
-                          <span>{{ item.tag }}：</span>
-                          <p>{{ item.text }}</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="bq"></div>
-                  <div class="btnwrap">
-                    <div class="btn az_btn ">
-                      <a
-                        href="/download.php?id=59131"
-                        rel="nofollow"
-                        target="blank"
-                        ><p style="width: 103px">进入下载</p>
-                        <span></span
-                      ></a>
-                      <div class="ewmwrap">
-                        <!-- <div
-                          id="qrcode"
-                          title="https://www.app522.com/down/18073.html"
-                        >
-                          <canvas
-                            width="120"
-                            height="120"
-                            style="display: none;"
-                          ></canvas
-                          ><img
-                            src="data:image/png;base64,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"
-                            style="display: block;"
-                          />
-                        </div> -->
-                        <p>手机扫描下载</p>
-                      </div>
-                    </div>
-                  </div>
-                  <span class="title expand-btn"
-                    ><i class="arrow arrow-down"></i><i class="icon"></i>
-                    <h2>惠人赚</h2>
-                    试玩介绍</span
-                  >
-                  <div class="app-detail-intro expand-panel">
-                    惠人赚app是一款专注于游戏<a
-                      href="https://www.app522.com/down/ios/"
-                      target="_blank"
-                      >试玩</a
-                    >挂机自动<a
-                      href="https://www.app522.com/down/ios/"
-                      target="_blank"
-                      >赚钱</a
-                    >的APP。惠人赚是贵州书辉文化传媒有限公司旗下的一款游戏试玩APP。试玩游戏，享受游戏的乐趣
-                    ，赚钱零花钱，利用闲时间赚钱。随手做几个任务，新手一元提现，随时可提现。<br />
-                    <br />
-                    【赚钱特点】<br />
-                    1、新手注册一元提现。<br />
-                    2、新用户注册送0.88元红包。<br />
-                    3、签到送现金红包，人人有份。<br />
-                    4、推荐好友，好友完成一元提现任务，奖励1元红包，上不封顶。<br />
-                    5、推荐好友，好友每完成一个任务，奖励0.25元，上不封顶。<br />
-                    <br />
-                    【赚钱亮点】<br />
-                    1、想要赚钱的吗？不管你是做什么的，都是可以在这里赚钱的呀；<br />
-                    2、不管你是什么时候做，都有超级多的任务在这里等着你的哦，自己可以随意的前来选择；<br />
-                    3、想要做<a
-                      href="https://www.app522.com/down/ios/"
-                      target="_blank"
-                      >兼职</a
-                    >的小伙伴不妨前来考虑一下，没有固定的时间，想要赚钱还是一件简单的事情的呢。<br />
-                    <br />
-                    【联系我们】<br />
-                    惠人赚官方联系QQ：937598093<br />
-                    惠人赚官方联系微信：zxhy1611
-                  </div>
-                  <span class="title"
-                    ><i class="icon"></i>
-                    <h2>惠人赚</h2>
-                    赚钱截图</span
-                  >
-                  <div id="J_Screenshot" class="screen-shots" style="">
-                    <a href="javascript:;" class="prev none"
-                      ><i class="icon"></i></a
-                    ><a href="javascript:;" class="next"
-                      ><i class="icon"></i
-                    ></a>
-                    <div class="gallery-box">
-                      <ul class="gallery clearfix">
-                        <li>
-                          <img
-                            src="/upload/img/2019/10/09/5d9dcfa0b84db.jpg"
-                            alt="惠人赚"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            src="/upload/img/2019/10/09/5d9dcfa3243f1.jpg"
-                            alt="惠人赚"
-                          />
-                        </li>
-                        <li>
-                          <img
-                            src="/upload/img/2019/10/09/5d9dcfa5964d8.jpg"
-                            alt="惠人赚"
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+          <div class="content-box">
+            <!-- 顶部参数 -->
+            <div class="detail-top">
+              <!-- 左边图片 -->
+              <div class="img-left">
+                <img :src="tagList.coverImage" />
+                <div class="app-name">{{ tagList.name }}</div>
+              </div>
+              <!-- 右边各项参数 -->
+              <div class="parameter">
+                <ul>
+                  <li>
+                    <span class="item-tag">分类：</span>
+                    <span class="item-text">{{ tagList.getClass }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">提现：</span>
+                    <span class="item-text">{{ tagList.tixian }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">本金：</span>
+                    <span class="item-text">{{ tagList.benjin }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">系统：</span>
+                    <span class="item-text">{{ tagList.system }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">时间：</span>
+                    <span class="item-text">{{ tagList.times | formatDateDay }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">发布：</span>
+                    <span class="item-text">{{ tagList.autor }}</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">浏览：</span>
+                    <span class="item-text">{{ tagList.view }}次</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">下载：</span>
+                    <span class="item-text">{{ tagList.downLoadNum }}次</span>
+                  </li>
+                  <li>
+                    <span class="item-tag">可玩性：</span>
+                   
+                    <span class="item-text"><Rate class="detaill-rate" disabled v-model="tagList.rate" /></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- 下载 -->
+            <div class="az_btn">
+              <a :href="tagList.downLoadUrl" rel="nofollow" target="blank">
+                <p style="width: 103px">进入下载</p>
+                <span
+                  @mouseenter="hoverQrcode(1)"
+                  @mouseleave="hoverQrcode(0)"
+                ></span
+              ></a>
+              <div class="qrcodeDiv" v-if="showQrcode">
+                <img :src="tagList.qrcode" />
+                <div class="qrcode-text">手机扫描下载</div>
+              </div>
+            </div>
+            <Divider></Divider>
+            <!-- 详情 -->
+            <div class="detail-bottom">
+              <!-- 介绍 -->
+              <div class="app-introduce">
+                <div class="detail-title"><Icon type="md-flame" />软件介绍</div>
+                <div class="detail-context">
+                  {{ tagList.introduce }}
                 </div>
               </div>
-              <!-- <div class="article-left">
-                <a @click="gotoContent(iitem, index)" class="page-img"
-                  ><img :src="item.coverImage"
-                /></a>
-              </div> -->
-              <!-- <div class="article-right">
-                <div class="article-text">
-                  <div class="article-title">
-                    <a @click="gotoContent(item, index)">{{ item.title }}</a>
-                  </div>
-                  <div class="list-text">
-                    
-                    <div class="content-page">111</div>
-                  </div>
-                  <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}</i>
-                    <span class="float-left mr-small">{{ item.autor }}</span
-                    >{{ item.times }}
-                  </div>
+              <!-- 特点 -->
+              <div class="app-introduce">
+                <div class="detail-title">
+                  <Icon type="md-thumbs-up" />软件特点
                 </div>
-              </div> -->
+                <div class="detail-context">
+                  <ul>
+                    <li>
+                      {{ tagList.trait }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 玩家群 -->
+              <div class="app-introduce">
+                <div class="detail-title">
+                  <Icon type="ios-chatbubbles" />玩家群
+                </div>
+                <div class="detail-context">
+                  <ul>
+                    <li v-for="(item, index) in tagList.contact" :key="index">
+                      {{ item.types }}：{{ item.text }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 截图 -->
+              <div class="app-introduce">
+                <div class="detail-title">
+                  <Icon type="ios-chatbubbles" />玩家群
+                </div>
+                <div class="detail-context">
+                  <ul>
+                    <li
+                      v-for="(item, index) in tagList.screenshot"
+                      :key="index"
+                    >
+                      <img :src="item.url" />
+                      <div>{{ item.name }}</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -173,50 +135,61 @@
 
 <script>
 import Home1 from "./Home1";
+import MyBreadcrumb from "./MyBreadcrumb";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
   name: "AppDetail",
 
   props: [],
-  components: { VueMarkdown, Home1 },
+  components: { VueMarkdown, Home1 ,MyBreadcrumb},
   data() {
     return {
-      tagList: [
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-        {
-          tag: "提现",
-          text: "无门槛"
-        },
-        {
-          tag: "系统",
-          text: "安卓苹果"
-        },
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-        {
-          tag: "分类",
-          text: "安卓赚钱"
-        },
-      ],
-      adTip: "",
+     getRouter:"",
+      title1:"淘宝赚钱",
+      title2:"货返",
+      icon1:"ios-home-outline",
+      icon2:"logo-buffer",
+      tagList: {},
+      // [
+      //   {
+      //     tag: "分类",
+      //     text: "安卓赚钱"
+      //   },
+      //   {
+      //     tag: "提现",
+      //     text: "无门槛"
+      //   },
+      //   {
+      //     tag: "本金",
+      //     text: "需要"
+      //   },
+      //   {
+      //     tag: "系统",
+      //     text: "安卓苹果"
+      //   },
+      //   {
+      //     tag: "时间",
+      //     text: "2012-09"
+      //   },
+      //   {
+      //     tag: "发布",
+      //     text: "用户"
+      //   },
+      //   {
+      //     tag: "浏览",
+      //     text: "254次"
+      //   },
+      //   {
+      //     tag: "下载",
+      //     text: "145次"
+      //   },
+      //   {
+      //     tag: "可玩性",
+      //     text: "5"
+      //   }
+      // ],
+      adTip: "appDetail",
       isBanner: false,
       isAdTipRow: false,
       articleList: [],
@@ -232,7 +205,8 @@ export default {
           autor: "",
           times: ""
         }
-      ]
+      ],
+      showQrcode: false
     };
   },
   computed: {},
@@ -257,24 +231,26 @@ export default {
     }
   },
   methods: {
-    getArticle(flag) {
+    getAppList(types1, types2, id) {
       this.axios
-        .get(`${this.baseUrl}/articles/get`, {
+        .get(`${this.baseUrl}/appLists/getApp`, {
           //接全部改成模板字符创
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
-            userName: "longwei",
-            flag: flag //all表示所有文章
+            types1: types1,
+            types2: types2,
+            id: id
           }
         })
         .then(res => {
           //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
           res.data.resulet.length > 0
-            ? (this.showTips = false)
-            : (this.showTips = true);
-          this.articleObj = res.data.resulet;
-          console.log(this.articleObj, "打印文章数据");
+            ? (this.showApp = false)
+            : (this.showApp = true);
+          this.tagList = res.data.resulet;
+          this.title2 = res.data.resulet.getClass
+          // console.log(this.appArry, "打印文章数据");
         })
         .catch(err => {
           console.log("err", err);
@@ -312,21 +288,60 @@ export default {
           nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
         }
       });
+    },
+    hoverQrcode(flag) {
+      if (flag == 1) {
+        this.showQrcode = true;
+      }
+      else if(flag==0){
+         this.showQrcode = false
+      }
     }
   },
   mounted() {
-    if (this.$route.query.type) {
-      //点击非首页导航
-      this.isBanner = false;
-      this.isAdTipRow = false;
-      this.adTip = this.$route.query.type;
-      //  this.getArticle(this.$route.query.type)
-    } else {
-      this.isBanner = true;
-      this.isAdTipRow = true;
-      this.adTip = "all";
-      // this.getArticle("all")
-    }
+    console.log(this.$route.query.id);
+    let types1 = this.$route.query.types1;
+    let types2 = this.$route.query.types2;
+    let id = this.$route.query.id;
+    this.$route.query.types2,
+    this.getAppList(
+      types1,
+      types2,
+      id
+    );
+     switch (types1) {
+            case "tb":
+            this.title1 = "淘宝赚钱"
+            this.getRouter = "taobao"
+                break;
+             case "wx":
+              this.title1 = "微信赚钱"
+                break;
+            default:
+                break;
+        }
+    //  switch (types2) {
+    //         case "huofan":
+    //         this.title1 = "货返"
+    //             break;
+    //          case "wx":
+    //           this.title1 = "微信赚钱"
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // if (this.$route.query.type) {
+    //   //点击非首页导航
+    //   this.isBanner = false;
+    //   this.isAdTipRow = false;
+    //   this.adTip = this.$route.query.type;
+    //   //  this.getArticle(this.$route.query.type)
+    // } else {
+    //   this.isBanner = true;
+    //   this.isAdTipRow = true;
+    //   this.adTip = "all";
+    //   // this.getArticle("all")
+    // }
     // this.getArticle("all");
     // Bus.$on("getTypes", data => {
     //   this.getArticle(data);
@@ -474,180 +489,155 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-// ---------------------
-.detail.detail-page .detail-box,
-.detail.detail-page .detail-side {
-  zoom: 1;
-  -moz-transform: scale(1);
-  -moz-transform-origin: top center;
+.detail-top {
+  .img-left {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    text-align: center;
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      border: none;
+    }
+    .app-name {
+      display: block;
+      height: 34px;
+      line-height: 34px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #36aafd;
+      margin-top: 10px;
+    }
+  }
+  .parameter {
+    margin-left: 140px;
+    margin-top: -147px;
+    ul {
+      width: 600px;
+      li {
+        float: left;
+        list-style: none;
+            width: 200px;
+        padding: 10px;
+        .item-tag {
+          font-size: 12px;
+          color: #9e9e9e;
+        }
+        .item-text {
+          padding-left: 5px;
+          font-size: 12px;
+          color: #525252;
+        }
+      }
+    }
+    ul::after {
+      display: block;
+      content: "";
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      clear: both;
+    }
+  }
 }
-.detail .detail-box {
-  float: left;
-  width: 780px;
-  min-height: 600px;
-  background: #fff;
-  border-radius: 2px;
-  padding: 28px;
-}
-.Top_info {
-  width: 100%;
-  min-height: 290px;
-  border-bottom: 1px solid #f0f1f7;
-}
-
-.Top_info .info {
-  float: left;
-  width: 100%;
-  min-height: 100px;
-}
-.Top_info .info .img {
-  width: 120px;
-  text-align: center;
-}
-.Top_info .info .img {
-  float: left;
-  margin-right: 15px;
-}
-.Top_info .bt {
-  width: 100%;
-  height: 34px;
-  float: left;
-}
-.Top_info .info .img img {
-  margin-right: 15px;
-  margin: 0 auto;
-}
-.alllist_app img,
-.icon-wrap img,
-.info_L .info img {
-  transition: all 0.5s ease-out;
-  -moz-transition: all 0.5s ease-out;
-  -o-transition: all 0.5s ease-out;
-  -ms-transition: all 0.5s ease-out;
-  -webkit-transition: all 0.5s ease-out;
-  border-radius: 10px;
-}
-.alllist_app img,
-.icon-wrap img,
-.info_L .info img {
-  transition: all 0.5s ease-out;
-  -moz-transition: all 0.5s ease-out;
-  -o-transition: all 0.5s ease-out;
-  -ms-transition: all 0.5s ease-out;
-  -webkit-transition: all 0.5s ease-out;
-  border-radius: 10px;
-}
-.info img {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-}
-img {
-  vertical-align: middle;
-}
-fieldset,
-iframe,
-img {
-  border: 0 none;
-}
-.Top_info .bt h1,
-.Top_info .bt p {
-  display: block;
-  height: 34px;
-  line-height: 34px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #36aafd;
-  margin-top: 10px;
-  max-width: 580px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: 100%;
-  font-weight: 400;
-}
-.Top_info .info .info_cent {
-  float: right;
-  width: 600px;
-  min-height: 90px;
-}
-li,
-ol,
-ul {
-  list-style: none;
-}
-.Top_info .info .info_cent ul li {
-  // width: 100%;
-  display: block;
-  float: left;
-  min-height: 26px;
-  line-height: 26px;
-  font-size: 12px;
-  margin: 4px 0;
-}
-li,
-ol,
-ul {
-  list-style: none;
-}
-.Top_info .info .info_cent ul li span {
-  width: 50px;
-  color: #9e9e9e;
-}
-.Top_info .info .info_cent ul li span,
-.Top_info .info .info_cent ul li p {
-  display: block;
-  float: left;
-}
-.Top_info .info .info_cent ul li p {
-  min-width: 140px;
-  max-width: 100%;
-  height: 26px;
-  overflow: hidden;
-  margin: 0 4px;
-  color: #525252;
-}
-.Top_info .info .info_cent ul li span,
-.Top_info .info .info_cent ul li p {
-  display: block;
-  float: left;
-}
-.Top_info .bq {
-  float: left;
-  width: 100%;
-  height: 15px;
-  overflow: hidden;
-  margin: 10px 0;
-}
-.Top_info .btnwrap {
-  float: left;
-  width: 100%;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.2);
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 25px;
-}
-.Top_info .btnwrap .az_btn {
+.az_btn {
+  position: relative;
+  margin-top: 50px;
   background: #29cc96;
-}
-.Top_info .btnwrap .az_btn {
-  background: #29cc96;
-}
-.Top_info .btnwrap > div {
-  float: left;
+  // float: left;
   width: 152px;
   height: 50px;
   border-radius: 4px;
   margin-right: 10px;
   box-shadow: 0px 5px 20px 1px rgba(0, 0, 0, 0.1);
   position: relative;
+  a {
+    cursor: pointer;
+
+    p {
+      width: 150px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      float: left;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 11px 0;
+      border-right: 1px solid #fff;
+    }
+    span {
+      display: block;
+      float: left;
+      margin: 14px 0 0 13px;
+      background: url(https://www.app522.com/templates/pc/images/ico-img3.png)
+        no-repeat;
+      height: 24px;
+      width: 24px;
+      background-position: 0 -161px;
+    }
+  }
+}
+.detail-bottom {
+  .app-introduce {
+    margin-bottom: 40px;
+    .detail-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .detail-context {
+      margin: 10px;
+      color: #848484;
+      letter-spacing: 1px;
+      ul {
+        li {
+          list-style: none;
+          display: inline-block;
+          padding: 10px;
+          span {
+            color: #000;
+          }
+          img {
+            height: 442px;
+            width: 220px;
+          }
+          div {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+.qrcodeDiv {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  left: 200px;
+  border-radius: 5px;
+  text-align: center;
+  border: 2px solid #ddd;
+  width: 150px;
+  height: 150px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .qrcode-text {
+    height: 30px;
+    line-height: 30px;
+    width: 150px;
+    margin-left: -2px;
+    background: #29cc96;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+.detaill-rate{
+  font-size: 12px;
+  display: inline-block;
 }
 </style>

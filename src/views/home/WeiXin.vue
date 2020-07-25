@@ -1,44 +1,65 @@
 <template>
   <div class="content-article">
-    <Home1 :isBanner="isBanner" :isAdTipRow="isAdTipRow" :adTip="adTip">
+    <Home1 :isBanner="false" :isAdTipRow="false" adTip="tb">
       <div slot="article">
-        <div v-if="showTips" class="ad-tips content-left ad-content-left">
-          该分类下暂无数据，您可以查看其它分类
-        </div>
-        <div v-if="!showTips" class="ad-content-left">
-          <div>
-            <div
-              
-              v-for="(item, index) in articleObj"
-              :key="index"
-            >
-            <div v-if="item.show" class="content-box">
-              <div class="article-left">
-                <a @click="gotoContent(iitem, index)" class="page-img"
-                  ><img :src="item.coverImage" alt="内容无法展示..."
-                /></a>
-              </div>
-              <div class="article-right">
-                <div class="article-text">
-                  <div class="article-title">
-                    <a @click="gotoContent(item, index)">{{ item.title }}</a>
+        <div class="ad-content-left">
+          <Tabs>
+            <TabPane label="优质文章" icon="logo-apple">
+              <div v-if="!showTips">
+                <div
+                  class="content-box"
+                  v-for="(item, index) in articleObj"
+                  :key="index"
+                >
+                  <div class="article-left">
+                    <a @click="gotoContent(iitem, index)" class="page-img"
+                      ><img :src="item.coverImage" alt="内容无法展示..."
+                    /></a>
                   </div>
-                  <div class="list-text">
-                    <VueMarkdown
-                      class="content-page"
-                      :source="item.content"
-                    ></VueMarkdown>
-                  </div>
-                  <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}</i>
-                    <span class="float-left mr-small">{{ item.autor }}</span
-                    >{{ item.times }}
+                  <div class="article-right">
+                    <div class="article-text">
+                      <div class="article-title">
+                        <a @click="gotoContent(item, index)">{{
+                          item.title
+                        }}</a>
+                      </div>
+                      <div class="list-text">
+                        <VueMarkdown
+                          class="content-page"
+                          :source="item.content"
+                        ></VueMarkdown>
+                      </div>
+                      <div class="list-meta">
+                        <i class="page-top bg-danger">{{ item.tag }}</i>
+                        <span class="float-left mr-small">{{ item.autor }}</span
+                        >{{ item.times }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div v-if="showTips" class="ad-tips content-left">
+                该分类下暂无数据，您可以查看其它分类
               </div>
-            </div>
-          </div>
+            </TabPane>
+            <TabPane label="软件列表" icon="logo-windows">
+              <span
+                v-for="(item, index) in sorTagtList"
+                :key="index"
+                @click="changeTag(index)"
+                :class="item.tagClass"
+                class="tagFault"
+                >{{ item.text }}</span
+              >
+              <!-- 软件列表 -->
+              <div class="applist">
+                <AppList v-if="!showApp" :appArry="appArry"></AppList>
+                <div v-if="showApp" class="ad-tips content-left show-app">
+                  该分类下暂无数据，您可以查看其它分类
+                </div>
+              </div>
+            </TabPane>
+          </Tabs>
         </div>
       </div>
     </Home1>
@@ -47,20 +68,18 @@
 
 <script>
 import Home1 from "./Home1";
+import AppList from "./AppList";
 import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
-  name: "Article",
-
+  name: "WeiXin",
   props: [],
-  components: { VueMarkdown, Home1 },
+  components: { VueMarkdown, Home1, AppList },
   data() {
     return {
-      adTip: "",
-      isBanner: false,
-      isAdTipRow: false,
       articleList: [],
       showTips: false, //是否显示没有内容的提示
+      showApp: false, //是否显示没有应用的提示
       articleLength: 1, //文章长度
       articleIndex: 0,
       articleObj: [
@@ -72,31 +91,49 @@ export default {
           autor: "",
           times: ""
         }
+      ],
+      appArry: [],
+      sorTagtList: [
+        {
+          checkable: true,
+          tagClass: "tagClassCheck",
+          text: "全部",
+          value: "all"
+        },
+        {
+          checkable: false,
+          tagClass: "tagClass",
+          text: "货返",
+          value: "huofan"
+        },
+        {
+          checkable: false,
+          tagClass: "tagClass",
+          text: "立返",
+          value: "lifan"
+        },
+        {
+          checkable: false,
+          tagClass: "tagClass",
+          text: "可用红包",
+          value: "hongbao"
+        },
+        { checkable: false, tagClass: "tagClass", text: "其它", value: "other" }
       ]
     };
   },
   computed: {},
-  watch: {
-    $route: {
-      //同一个路由，参数不同会触发这里
-      handler() {
-        if (this.$route.query.type) {
-          //点击非首页导航
-          this.isBanner = false;
-          this.isAdTipRow = false;
-          this.adTip = this.$route.query.type;
-           this.getArticle(this.$route.query.type)
-        }else{
-           this.isBanner = true;
-          this.isAdTipRow = true;
-          this.adTip = "all"
-          this.getArticle("all")
-        }
-      },
-      deep:true
-    }
-  },
   methods: {
+    // 选中tag
+    changeTag(index) {
+      this.sorTagtList.forEach((item, index) => {
+        item.checkable = false;
+        item.tagClass = "tagClass";
+      });
+      this.sorTagtList[index].tagClass = "tagClassCheck";
+      this.sorTagtList[index].checkable = true;
+      this.getAppList("wx", this.sorTagtList[index].value);
+    },
     getArticle(flag) {
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
@@ -115,6 +152,29 @@ export default {
             : (this.showTips = true);
           this.articleObj = res.data.resulet;
           console.log(this.articleObj, "打印文章数据");
+        })
+        .catch(err => {
+          console.log("err", err);
+        });
+    },
+    getAppList(types1, types2) {
+      this.axios
+        .get(`${this.baseUrl}/appLists/getApp`, {
+          //接全部改成模板字符创
+          params: {
+            // pageSize: this.pageSize,
+            // currentPage:this.currentPage,
+            types1: types1,
+            types2: types2
+          }
+        })
+        .then(res => {
+          //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
+          res.data.resulet.length > 0
+            ? (this.showApp = false)
+            : (this.showApp = true);
+          this.appArry = res.data.resulet;
+          // console.log(this.appArry, "打印文章数据");
         })
         .catch(err => {
           console.log("err", err);
@@ -155,19 +215,9 @@ export default {
     }
   },
   mounted() {
-        if (this.$route.query.type) {
-          //点击非首页导航
-          this.isBanner = false;
-          this.isAdTipRow = false;
-          this.adTip = this.$route.query.type;
-           this.getArticle(this.$route.query.type)
-        }else{
-           this.isBanner = true;
-          this.isAdTipRow = true;
-          this.adTip = "all"
-          this.getArticle("all")
-        }
-    // this.getArticle("all");
+    // Bus.$emit("hiddenBanner");
+    this.getArticle("wx");
+    this.getAppList("wx", "all");
     // Bus.$on("getTypes", data => {
     //   this.getArticle(data);
     // });
@@ -216,7 +266,7 @@ export default {
   width: 100%;
   @media screen and (min-width: 992px) {
     box-sizing: border-box;
-    // float: right;
+    float: right;
   }
   .article-text {
     display: block;
@@ -250,14 +300,13 @@ export default {
       line-height: 14px;
       color: #868e96;
       .page-top {
-         padding: 1px;
         font-size: 12px;
         font-style: normal;
-        // line-height: 14px;
+        line-height: 14px;
         display: block;
         float: left;
-        // width: 14px;
-        // height: 14px;
+        width: 14px;
+        height: 14px;
         margin-right: 4px;
         text-align: center;
         color: #fff;
@@ -265,15 +314,12 @@ export default {
       }
       .bg-danger {
         background-color: #fa5252 !important;
-       
       }
       .float-left {
         float: left !important;
       }
       .mr-small {
         margin-right: 10px !important;
-        height: 16px;
-        line-height: 16px;
       }
     }
     // .list-meta::after{
@@ -313,9 +359,23 @@ export default {
     // }
   }
 }
-.ad-tips{
-  font-size: 18px;
-  margin-top: 20px;
-  text-align: center;
+.tagFault {
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+}
+.tagClass {
+  background: #f7f7f7;
+}
+.tagClassCheck {
+  background: #2d8cf0;
+  color: #fff;
+}
+.applist {
+  margin-top: 10px;
+}
+.show-app{
+  margin: 20px;
 }
 </style>

@@ -12,7 +12,7 @@
             :key="index"
           >
             <div class="article-left">
-              <a @click="gotoContent(iitem, index)" class="page-img"
+              <a @click="gotoContent(item, index)" class="page-img"
                 ><img :src="item.coverImage" alt="内容无法展示..."
               /></a>
             </div>
@@ -21,7 +21,7 @@
                 <div class="article-title">
                   <a @click="gotoContent(item, index)">{{ item.name }}</a>
                   <Rate disabled v-model="item.rate" />
-                  <Button
+                  <Button @click="gotoContent(item, index)"
                     class="btn-downLoad"
                     size="small"
                     icon="ios-download-outline"
@@ -30,15 +30,15 @@
                   >
                 </div>
                 <div class="list-text">
-                  <VueMarkdown
+                  <div
                     class="content-page"
-                    :source="item.content"
-                  ></VueMarkdown>
+               
+                  >{{item.introduce}}</div>
                 </div>
                 <div class="list-meta">
                   <i class="page-top bg-danger">{{ item.tag }}</i>
                   <span class="float-left mr-small">{{ item.autor }}</span
-                  >{{ item.times }}
+                  >{{ item.times | formatDateDay }}
                   <span class="system-app">支持系统：{{ item.system }}</span>
                   <span class="system-app"
                     >下载次数：{{ item.downLoadNum }}</span
@@ -133,6 +133,9 @@ export default {
       this.$router.push({
         path: "/appDetail",
         query: {
+          types1:item.types1,
+          types2:item.types2,
+          id:item.id,
           // // vue路由传对象刷新会报错，数据丢失，用json字符串解决
           // // articleObj:encodeURIComponent(JSON.stringify(item)),
           // idIndex: this.articleObj[index].idIndex,

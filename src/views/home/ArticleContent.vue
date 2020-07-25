@@ -19,15 +19,26 @@
                 </div>
               </div>
               <!-- 文章内容 -->
-              <VueMarkdown
+              <!-- <div
                 class="content-page"
-                :source="articleObj.content"
-              ></VueMarkdown>
-               <div class="mb-default clearfix">
+                v-html="articleObj.content"
+              ></div> -->
+              <mavon-editor
+                class="content-page"
+                :value="articleObj.content"
+                :subfield="false"
+                :defaultOpen="'preview'"
+                :toolbarsFlag="false"
+                :editable="false"
+                :scrollStyle="false"
+                :ishljs="true"
+              ></mavon-editor>
+
+              <div class="mb-default clearfix">
                 <a
                   class="float-left btn btn-outline-default mr-small"
-                  href="http://www.shukoe.com/tag/%E8%B0%B7%E6%AD%8C%E8%81%94%E7%9B%9F"
-                  >谷歌联盟</a
+                  
+                  >{{bigType | bigTypes}}</a
                 >
               </div>
               <!-- 文章底部 上一篇，下一篇 -->
@@ -46,7 +57,7 @@
                   </li>
                 </ul>
               </div>
-             
+
               <!-- 底部评论 -->
               <Comment></Comment>
             </div>
@@ -77,6 +88,7 @@ export default {
   },
   data() {
     return {
+      bigType:"",
       articleObj: {},
       random: [],
       articleIndex: "",
@@ -100,7 +112,6 @@ export default {
           }
         })
         .then(res => {
-
           this.keepList = res.data.resulet;
         })
         .catch(err => {
@@ -108,7 +119,6 @@ export default {
         });
     },
     getArticle(types, idIndex) {
-
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
           params: {
@@ -119,8 +129,7 @@ export default {
         })
         .then(res => {
           this.articleObj = res.data.resulet;
-         Bus.$emit("postArticleList",this.articleObj)
-
+          Bus.$emit("postArticleList", this.articleObj);
 
           this.articleObj.Pageview = res.data.resulet.Pageview + 1;
           this.submit();
@@ -148,18 +157,16 @@ export default {
         })
         .then(res => {
           if (res.data.status == "0") {
-   
           } else {
-
           }
         })
-        .catch(err => {
-      
-        });
+        .catch(err => {});
     }
   },
   mounted() {
     // Bus.$emit('hiddenBanner')
+    this.bigType = this.$route.query.types
+    console.log(this.$route.query.types)
     this.getArticle(
       this.$route.query.types, //大类
       Number(this.$route.query.idIndex) //id标志
@@ -241,6 +248,34 @@ export default {
           content: "";
         }
         .content-page {
+          // font-size: 16px;
+          color: black;
+          padding: 0 10px;
+          line-height: 1.6;
+          word-spacing: 0px;
+          letter-spacing: 0px;
+          word-break: break-word;
+          word-wrap: break-word;
+          text-align: left;
+          /deep/ img {
+            border-radius: 0px 0px 5px 5px;
+            display: block;
+            margin: 20px auto;
+            width: 85%;
+            height: 100%;
+            object-fit: contain;
+            box-shadow: #84a1a8 0px 10px 15px;
+            @media screen and (min-width: 576px) {
+              width: 85%;
+            }
+            @media screen and (min-width: 768px) {
+              width: 60%;
+            }
+            @media screen and (min-width: 992px) {
+              width: 60%;
+            }
+          }
+
           // word-break: break-all !important;
           // @media screen and (min-width: 992px) {
           //   margin-right: 0;
@@ -248,65 +283,75 @@ export default {
           //   padding: 40px;
           // }
           // 对文档的特殊标签进行处理
-          /deep/ code {
-            display: inline-block;
-            word-break: break-all !important;
-            // @media screen and (min-width: 576px) {
-            //   width: 400px;
-            // }
-            // @media screen and (min-width: 768px) {
-            //   width: 720px;
-            // }
-          }
-          /deep/ img {
-            margin: 0 auto;
-            max-width: 80%;
-          }
+          // /deep/ code {
+          //   display: inline-block;
+          //   word-break: break-all !important;
+          //   // @media screen and (min-width: 576px) {
+          //   //   width: 400px;
+          //   // }
+          //   // @media screen and (min-width: 768px) {
+          //   //   width: 720px;
+          //   // }
+          // }
+          // /deep/ img {
+          //   margin: 0 auto;
+          //   max-width: 80%;
+          // }
         }
       }
     }
   }
 }
 .mb-default {
-    margin-bottom: 20px !important;
+  margin-top: 20px;
+  margin-bottom: 20px !important;
 }
 .btn:not(:disabled) {
-    cursor: pointer;
-        border: 1px solid #ddd;
+  cursor: pointer;
+  border: 1px solid #ddd;
 }
 
 .mr-small {
-    margin-right: 10px !important;
+  margin-right: 10px !important;
 }
 .float-left {
-    float: left !important;
+  float: left !important;
 }
 .btn-outline-default {
-    color: #868e96;
-    border-color: #868e96;
-
+  color: #868e96;
+  border-color: #868e96;
 }
 .btn {
-    font: inherit;
-    font-size: 14px;
-    line-height: 33px;
-    display: inline-block;
-    overflow: visible;
-    height: 35px;
-    margin: 0;
-    padding: 0 20px;
-    transition: 0.2s ease-in-out;
-    transition-property: color,background-color,border-color;
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    text-transform: none;
-    border: 1px solid transparent;
-    border-radius: 2px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 33px;
+  display: inline-block;
+  overflow: visible;
+  height: 35px;
+  margin: 0;
+  padding: 0 20px;
+  transition: 0.2s ease-in-out;
+  transition-property: color, background-color, border-color;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  text-transform: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
 }
 .clearfix::after {
-    display: block;
-    clear: both;
-    content: '';
+  display: block;
+  clear: both;
+  content: "";
+}
+// 去掉md的滚动条
+/deep/ .v-show-content{
+     height: inherit!important;
+}
+/deep/ .v-note-wrapper{
+     z-index: 0!important;
+}
+/deep/ .content-page{
+    padding: 0!important;
 }
 </style>

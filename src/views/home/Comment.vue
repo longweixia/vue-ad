@@ -114,9 +114,9 @@
               <Input v-model="commentList.context" placeholder="必填"></Input>
             </FormItem>
             <FormItem>
-              <Button type="primary" @click="handleSubmit()">Submit</Button>
+              <Button type="primary" @click="handleSubmit()">提交</Button>
               <Button @click="handleReset()" style="margin-left: 8px"
-                >Reset</Button
+                >重置</Button
               >
             </FormItem>
           </Form>
