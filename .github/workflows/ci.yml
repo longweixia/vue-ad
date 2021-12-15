@@ -6,6 +6,8 @@ on: # 监听 master 分支上的 push 事件
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest # 构建环境使用 ubuntu
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1  
@@ -23,5 +25,5 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.VUEAD }} # VUE_ADMIN_TEMPLATE 是我的 secret 名称，需要替换成你的
           BRANCH: master
           FOLDER: dist
-          REPOSITORY_NAME: longweixia/vue-ad # 这是我的 github page 仓库 https://github.com/longweixia/longweixia.git
+          REPOSITORY_NAME: longweixia/vue-ad # 这是我的 github page 仓库 longweixia.github.io/vue-ad
           TARGET_FOLDER: github-actions-demo # 打包的文件将放到静态服务器 github-actions-demo 目录下
