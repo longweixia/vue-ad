@@ -147,7 +147,6 @@ Github Actions 的执行详情点击仓库中的 `Actions` 选项查看。
 
 2. vue.config.js的publicPath填写仓库名
 ```js
-module.exports = {
     publicPath: '/vue-ad/',
 }
 ```
@@ -156,3 +155,5 @@ module.exports = {
 
 [预览](https://longweixia.github.io/vue-ad/#/)
 
+
+如果git pull 拉代码出问题，可以`git pull origin master --allow-unrelated-histories`
