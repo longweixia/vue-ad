@@ -2,10 +2,14 @@
   <div class="content-article">
     <Home1 :isBanner="false" :isAdTipRow="false" :adTip="adTip">
       <div slot="article">
-      <MyBreadcrumb :getRouter="getRouter" :title1="title1" :title2="title2" :icon1="icon1" :icon2="icon2"></MyBreadcrumb>
-        <div v-if="showTips" class="ad-tips content-left ad-content-left">
-          该分类下暂无数据，您可以查看其它分类
-        </div>
+        <MyBreadcrumb
+          :getRouter="getRouter"
+          :title1="title1"
+          :title2="title2"
+          :icon1="icon1"
+          :icon2="icon2"
+        ></MyBreadcrumb>
+        <div v-if="showTips" class="ad-tips content-left ad-content-left">该分类下暂无数据，您可以查看其它分类</div>
         <div v-if="!showTips" class="ad-content-left">
           <div class="content-box">
             <!-- 顶部参数 -->
@@ -52,7 +56,7 @@
                   </li>
                   <li>
                     <span class="item-tag">可玩性：</span>
-                   
+
                     <span class="item-text"><Rate class="detaill-rate" disabled v-model="tagList.rate" /></span>
                   </li>
                 </ul>
@@ -62,11 +66,8 @@
             <div class="az_btn">
               <a :href="tagList.downLoadUrl" rel="nofollow" target="blank">
                 <p style="width: 103px">进入下载</p>
-                <span
-                  @mouseenter="hoverQrcode(1)"
-                  @mouseleave="hoverQrcode(0)"
-                ></span
-              ></a>
+                <span @mouseenter="hoverQrcode(1)" @mouseleave="hoverQrcode(0)"></span>
+              </a>
               <div class="qrcodeDiv" v-if="showQrcode">
                 <img :src="tagList.qrcode" />
                 <div class="qrcode-text">手机扫描下载</div>
@@ -77,7 +78,10 @@
             <div class="detail-bottom">
               <!-- 介绍 -->
               <div class="app-introduce">
-                <div class="detail-title"><Icon type="md-flame" />软件介绍</div>
+                <div class="detail-title">
+                  <Icon type="md-flame" />
+                  软件介绍
+                </div>
                 <div class="detail-context">
                   {{ tagList.introduce }}
                 </div>
@@ -85,7 +89,8 @@
               <!-- 特点 -->
               <div class="app-introduce">
                 <div class="detail-title">
-                  <Icon type="md-thumbs-up" />软件特点
+                  <Icon type="md-thumbs-up" />
+                  软件特点
                 </div>
                 <div class="detail-context">
                   <ul>
@@ -98,27 +103,24 @@
               <!-- 玩家群 -->
               <div class="app-introduce">
                 <div class="detail-title">
-                  <Icon type="ios-chatbubbles" />玩家群
+                  <Icon type="ios-chatbubbles" />
+                  玩家群
                 </div>
                 <div class="detail-context">
                   <ul>
-                    <li v-for="(item, index) in tagList.contact" :key="index">
-                      {{ item.types }}：{{ item.text }}
-                    </li>
+                    <li v-for="(item, index) in tagList.contact" :key="index">{{ item.types }}：{{ item.text }}</li>
                   </ul>
                 </div>
               </div>
               <!-- 截图 -->
               <div class="app-introduce">
                 <div class="detail-title">
-                  <Icon type="ios-chatbubbles" />玩家群
+                  <Icon type="ios-chatbubbles" />
+                  玩家群
                 </div>
                 <div class="detail-context">
                   <ul>
-                    <li
-                      v-for="(item, index) in tagList.screenshot"
-                      :key="index"
-                    >
+                    <li v-for="(item, index) in tagList.screenshot" :key="index">
                       <img :src="item.url" />
                       <div>{{ item.name }}</div>
                     </li>
@@ -134,22 +136,22 @@
 </template>
 
 <script>
-import Home1 from "./Home1";
-import MyBreadcrumb from "./MyBreadcrumb";
-import VueMarkdown from "vue-markdown";
-import Bus from "@/assets/event-bus.js";
+import Home1 from './Home1'
+import MyBreadcrumb from './MyBreadcrumb'
+// import VueMarkdown from "vue-markdown";
+import Bus from '@/assets/event-bus.js'
 export default {
-  name: "AppDetail",
+  name: 'AppDetail',
 
   props: [],
-  components: { VueMarkdown, Home1 ,MyBreadcrumb},
+  components: { Home1, MyBreadcrumb },
   data() {
     return {
-     getRouter:"",
-      title1:"淘宝赚钱",
-      title2:"货返",
-      icon1:"ios-home-outline",
-      icon2:"logo-buffer",
+      getRouter: '',
+      title1: '淘宝赚钱',
+      title2: '货返',
+      icon1: 'ios-home-outline',
+      icon2: 'logo-buffer',
       tagList: {},
       // [
       //   {
@@ -189,7 +191,7 @@ export default {
       //     text: "5"
       //   }
       // ],
-      adTip: "appDetail",
+      adTip: 'appDetail',
       isBanner: false,
       isAdTipRow: false,
       articleList: [],
@@ -198,16 +200,16 @@ export default {
       articleIndex: 0,
       articleObj: [
         {
-          coverImage: "",
-          title: "",
-          content: "",
-          tag: "",
-          autor: "",
-          times: ""
-        }
+          coverImage: '',
+          title: '',
+          content: '',
+          tag: '',
+          autor: '',
+          times: '',
+        },
       ],
-      showQrcode: false
-    };
+      showQrcode: false,
+    }
   },
   computed: {},
   watch: {
@@ -216,19 +218,19 @@ export default {
       handler() {
         if (this.$route.query.type) {
           //点击非首页导航
-          this.isBanner = false;
-          this.isAdTipRow = false;
-          this.adTip = this.$route.query.type;
-          this.getArticle(this.$route.query.type);
+          this.isBanner = false
+          this.isAdTipRow = false
+          this.adTip = this.$route.query.type
+          this.getArticle(this.$route.query.type)
         } else {
-          this.isBanner = true;
-          this.isAdTipRow = true;
-          this.adTip = "all";
-          this.getArticle("all");
+          this.isBanner = true
+          this.isAdTipRow = true
+          this.adTip = 'all'
+          this.getArticle('all')
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     getAppList(types1, types2, id) {
@@ -240,86 +242,70 @@ export default {
             // currentPage:this.currentPage,
             types1: types1,
             types2: types2,
-            id: id
-          }
+            id: id,
+          },
         })
-        .then(res => {
+        .then((res) => {
           //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
-          res.data.resulet.length > 0
-            ? (this.showApp = false)
-            : (this.showApp = true);
-          this.tagList = res.data.resulet;
+          res.data.resulet.length > 0 ? (this.showApp = false) : (this.showApp = true)
+          this.tagList = res.data.resulet
           this.title2 = res.data.resulet.getClass
           // console.log(this.appArry, "打印文章数据");
         })
-        .catch(err => {
-          console.log("err", err);
-        });
+        .catch((err) => {
+          console.log('err', err)
+        })
     },
     // 进入文章详情
     gotoContent(item, index) {
       //拼装上一页，下一页数据
-      let nextidIndex = this.articleObj[index - 1]
-        ? this.articleObj[index - 1].idIndex
-        : -1;
-      let nextname = this.articleObj[index - 1]
-        ? this.articleObj[index - 1].title
-        : -1;
-      let preidIndex = this.articleObj[index + 1]
-        ? this.articleObj[index + 1].idIndex
-        : -1;
-      let prename = this.articleObj[index + 1]
-        ? this.articleObj[index + 1].title
-        : -1;
+      let nextidIndex = this.articleObj[index - 1] ? this.articleObj[index - 1].idIndex : -1
+      let nextname = this.articleObj[index - 1] ? this.articleObj[index - 1].title : -1
+      let preidIndex = this.articleObj[index + 1] ? this.articleObj[index + 1].idIndex : -1
+      let prename = this.articleObj[index + 1] ? this.articleObj[index + 1].title : -1
       let nextPre = {
         nextidIndex: nextidIndex,
         nextname: nextname,
         preidIndex: preidIndex,
-        prename: prename
-      };
+        prename: prename,
+      }
       this.$router.push({
-        path: "/articleContent",
+        path: '/articleContent',
         query: {
           // vue路由传对象刷新会报错，数据丢失，用json字符串解决
           // articleObj:encodeURIComponent(JSON.stringify(item)),
           idIndex: this.articleObj[index].idIndex,
           types: this.articleObj[index].types,
 
-          nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
-        }
-      });
+          nextPre: encodeURIComponent(JSON.stringify(nextPre)), //上一页下一页数据
+        },
+      })
     },
     hoverQrcode(flag) {
       if (flag == 1) {
-        this.showQrcode = true;
+        this.showQrcode = true
+      } else if (flag == 0) {
+        this.showQrcode = false
       }
-      else if(flag==0){
-         this.showQrcode = false
-      }
-    }
+    },
   },
   mounted() {
-    console.log(this.$route.query.id);
-    let types1 = this.$route.query.types1;
-    let types2 = this.$route.query.types2;
-    let id = this.$route.query.id;
-    this.$route.query.types2,
-    this.getAppList(
-      types1,
-      types2,
-      id
-    );
-     switch (types1) {
-            case "tb":
-            this.title1 = "淘宝赚钱"
-            this.getRouter = "taobao"
-                break;
-             case "wx":
-              this.title1 = "微信赚钱"
-                break;
-            default:
-                break;
-        }
+    console.log(this.$route.query.id)
+    let types1 = this.$route.query.types1
+    let types2 = this.$route.query.types2
+    let id = this.$route.query.id
+    this.$route.query.types2, this.getAppList(types1, types2, id)
+    switch (types1) {
+      case 'tb':
+        this.title1 = '淘宝赚钱'
+        this.getRouter = 'taobao'
+        break
+      case 'wx':
+        this.title1 = '微信赚钱'
+        break
+      default:
+        break
+    }
     //  switch (types2) {
     //         case "huofan":
     //         this.title1 = "货返"
@@ -346,8 +332,8 @@ export default {
     // Bus.$on("getTypes", data => {
     //   this.getArticle(data);
     // });
-  }
-};
+  },
+}
 </script>
 
 <style lang="less" scoped>

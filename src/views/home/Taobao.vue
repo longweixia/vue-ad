@@ -24,10 +24,10 @@
                         }}</a>
                       </div>
                       <div class="list-text">
-                        <VueMarkdown
+                        <!-- <VueMarkdown
                           class="content-page"
                           :source="item.content"
-                        ></VueMarkdown>
+                        ></VueMarkdown> -->
                       </div>
                       <div class="list-meta">
                         <i class="page-top bg-danger">{{ item.tag }}</i>
@@ -69,13 +69,13 @@
 <script>
 import Home1 from "./Home1";
 import AppList from "./AppList";
-import VueMarkdown from "vue-markdown";
+// import VueMarkdown from "vue-markdown";
 import Bus from "@/assets/event-bus.js";
 export default {
   name: "Taobao",
 
   props: [],
-  components: { VueMarkdown, Home1, AppList },
+  components: { Home1, AppList },
   data() {
     return {
       articleList: [],

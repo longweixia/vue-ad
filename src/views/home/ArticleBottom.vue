@@ -5,40 +5,28 @@
         <a
           v-if="articleIndex - 1 > -1"
           @click="
-            gotoContent(
-              articleIndex - 1,
-              articleList[articleIndex - 1].types,
-              articleList[articleIndex - 1].idIndex
-            )
+            gotoContent(articleIndex - 1, articleList[articleIndex - 1].types, articleList[articleIndex - 1].idIndex)
           "
-          ><span>上一篇：</span
-          >{{
-            articleList[articleIndex - 1]
-              ? articleList[articleIndex - 1].title
-              : ""
-          }}</a
-        ><a
+        >
+          <span>上一篇：</span>
+          {{ articleList[articleIndex - 1] ? articleList[articleIndex - 1].title : '' }}
+        </a>
+        <a
           v-if="articleList[articleIndex + 1] == 'undefined' ? false : true"
           @click="
-            gotoContent(
-              articleIndex + 1,
-              articleList[articleIndex + 1].types,
-              articleList[articleIndex + 1].idIndex
-            )
+            gotoContent(articleIndex + 1, articleList[articleIndex + 1].types, articleList[articleIndex + 1].idIndex)
           "
-          ><span>下一篇：</span
-          >{{
-            articleList[articleIndex + 1]
-              ? articleList[articleIndex + 1].title
-              : ""
-          }}</a
         >
+          <span>下一篇：</span>
+          {{ articleList[articleIndex + 1] ? articleList[articleIndex + 1].title : '' }}
+        </a>
       </div>
       <div class="log-readmore">
         <h5 class="page-header">继续阅读</h5>
         <ul>
           <li v-for="(item, index) in keepList" :key="index">
-            <span class="page-dot"></span><a>{{ item.title }}</a>
+            <span class="page-dot"></span>
+            <a>{{ item.title }}</a>
           </li>
         </ul>
       </div>
@@ -47,25 +35,24 @@
 </template>
 
 <script>
-import AdHeader from "./AdHeader";
-import AdBanner from "./AdBanner";
+import AdHeader from './AdHeader'
+import AdBanner from './AdBanner'
 
-import AdFooter from "./AdFooter";
-import ArticleRight from "./ArticleRight";
-import VueMarkdown from "vue-markdown";
-import Bus from "@/assets/event-bus.js";
+import AdFooter from './AdFooter'
+import ArticleRight from './ArticleRight'
+// import VueMarkdown from "vue-markdown";
+import Bus from '@/assets/event-bus.js'
 
 export default {
-  name: "ArticleBottom",
+  name: 'ArticleBottom',
   components: {
     AdHeader,
     AdBanner,
 
     AdFooter,
     ArticleRight,
-    VueMarkdown
   },
-  props: ["articleList", "articleIndex"],
+  props: ['articleList', 'articleIndex'],
   data() {
     return {
       // isCollapsed: false,
@@ -73,46 +60,46 @@ export default {
       // showArticle: false,
       articleObj: {},
       random: [],
-      nextidIndex: "",
-      nextname: "",
-      preidIndex: "",
-      prename: "",
-      keepList: []
-    };
+      nextidIndex: '',
+      nextname: '',
+      preidIndex: '',
+      prename: '',
+      keepList: [],
+    }
   },
   computed: {
-    menuitemClasses: function() {
-      return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
-    }
+    menuitemClasses: function () {
+      return ['menu-item', this.isCollapsed ? 'collapsed-menu' : '']
+    },
   },
   methods: {
     gotoContent(articleIndex, types, idIndex) {
       const { href } = this.$router.resolve({
-        path: "/articleContent",
+        path: '/articleContent',
         query: {
           articleIndex: articleIndex,
           types: types,
-          idIndex: idIndex
-        }
-      });
-      window.open(href, "_blank");
+          idIndex: idIndex,
+        },
+      })
+      window.open(href, '_blank')
     },
     getArticleKeep(types, index) {
       this.axios
         .get(`${this.baseUrl}/articles/getKeep`, {
           params: {
-            userName: "longwei",
-            flag: types
-          }
+            userName: 'longwei',
+            flag: types,
+          },
         })
-        .then(res => {
-          console.log(res.data, 9898989899898989898989);
-          this.keepList = res.data.resulet;
+        .then((res) => {
+          console.log(res.data, 9898989899898989898989)
+          this.keepList = res.data.resulet
         })
-        .catch(err => {
-          console.log("err", err);
-        });
-    }
+        .catch((err) => {
+          console.log('err', err)
+        })
+    },
     // 增加阅读量
     // submit() {
     //   // 如果id存在就是修改，如果id不存在就是新增
@@ -142,17 +129,17 @@ export default {
     // }
   },
   mounted() {
-    console.log(this.articleList, 88888888);
-    this.getArticleKeep("baidu", this.articleList[this.articleIndex].idIndex);
-    Bus.$on("postNextPre", (nextidIndex, nextname, preidIndex, prename) => {
-      console.log(nextidIndex, nextname, preidIndex, prename, 999999999);
-      this.nextidIndex = nextidIndex;
-      this.nextname = nextname;
-      this.preidIndex = preidIndex;
-      this.prename = prename;
-    });
-  }
-};
+    console.log(this.articleList, 88888888)
+    this.getArticleKeep('baidu', this.articleList[this.articleIndex].idIndex)
+    Bus.$on('postNextPre', (nextidIndex, nextname, preidIndex, prename) => {
+      console.log(nextidIndex, nextname, preidIndex, prename, 999999999)
+      this.nextidIndex = nextidIndex
+      this.nextname = nextname
+      this.preidIndex = preidIndex
+      this.prename = prename
+    })
+  },
+}
 </script>
 
 <style lang="less" scoped>

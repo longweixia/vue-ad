@@ -34,8 +34,8 @@
   </div>
 </template>
 <script>
-import Swiper from "swiper";
-import "swiper/dist/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/dist/css/swiper.min.css";
 import Bus from "@/assets/event-bus.js";
 export default {
   name: "AdBanner",
@@ -65,18 +65,18 @@ export default {
   },
   mounted() {
  
-    var mySwiper = new Swiper(".swiper-container", {
-      autoplay: true,
-      delay: 2000, //2秒切换一次
-      loop: true,
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination"
-      },
-      observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true //修改swiper的父元素时，自动初始化swiper
-    });
-    this.getData("all");
+  //   var mySwiper = new Swiper(".swiper-container", {
+  //     autoplay: true,
+  //     delay: 2000, //2秒切换一次
+  //     loop: true,
+  //     // 如果需要分页器
+  //     pagination: {
+  //       el: ".swiper-pagination"
+  //     },
+  //     observer: true, //修改swiper自己或子元素时，自动初始化swiper
+  //     observeParents: true //修改swiper的父元素时，自动初始化swiper
+  //   });
+  //   this.getData("all");
   }
 };
 </script>

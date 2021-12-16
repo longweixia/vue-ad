@@ -2,40 +2,34 @@
   <div class="content-article">
     <Home1 :isBanner="isBanner" :isAdTipRow="isAdTipRow" :adTip="adTip">
       <div slot="article">
-        <div v-if="showTips" class="ad-tips content-left ad-content-left">
-          该分类下暂无数据，您可以查看其它分类
-        </div>
+        <div v-if="showTips" class="ad-tips content-left ad-content-left">该分类下暂无数据，您可以查看其它分类</div>
         <div v-if="!showTips" class="ad-content-left">
           <div>
-            <div
-              
-              v-for="(item, index) in articleObj"
-              :key="index"
-            >
-            <div v-if="item.show" class="content-box">
-              <div class="article-left">
-                <a @click="gotoContent(iitem, index)" class="page-img"
-                  ><img :src="item.coverImage" alt="内容无法展示..."
-                /></a>
-              </div>
-              <div class="article-right">
-                <div class="article-text">
-                  <div class="article-title">
-                    <a @click="gotoContent(item, index)">{{ item.title }}</a>
-                  </div>
-                  <div class="list-text">
-                    <VueMarkdown
+            <div v-for="(item, index) in articleObj" :key="index">
+              <div v-if="item.show" class="content-box">
+                <div class="article-left">
+                  <a @click="gotoContent(iitem, index)" class="page-img">
+                    <img :src="item.coverImage" alt="内容无法展示..." />
+                  </a>
+                </div>
+                <div class="article-right">
+                  <div class="article-text">
+                    <div class="article-title">
+                      <a @click="gotoContent(item, index)">{{ item.title }}</a>
+                    </div>
+                    <div class="list-text">
+                      <!-- <VueMarkdown
                       class="content-page"
                       :source="item.content"
-                    ></VueMarkdown>
-                  </div>
-                  <div class="list-meta">
-                    <i class="page-top bg-danger">{{ item.tag }}</i>
-                    <span class="float-left mr-small">{{ item.autor }}</span
-                    >{{ item.times }}
+                    ></VueMarkdown> -->
+                    </div>
+                    <div class="list-meta">
+                      <i class="page-top bg-danger">{{ item.tag }}</i>
+                      <span class="float-left mr-small">{{ item.autor }}</span>
+                      {{ item.times }}
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
@@ -46,17 +40,17 @@
 </template>
 
 <script>
-import Home1 from "./Home1";
-import VueMarkdown from "vue-markdown";
-import Bus from "@/assets/event-bus.js";
+import Home1 from './Home1'
+// import VueMarkdown from "vue-markdown";
+import Bus from '@/assets/event-bus.js'
 export default {
-  name: "Article",
+  name: 'Article',
 
   props: [],
-  components: { VueMarkdown, Home1 },
+  components: { Home1 },
   data() {
     return {
-      adTip: "",
+      adTip: '',
       isBanner: false,
       isAdTipRow: false,
       articleList: [],
@@ -65,15 +59,15 @@ export default {
       articleIndex: 0,
       articleObj: [
         {
-          coverImage: "",
-          title: "",
-          content: "",
-          tag: "",
-          autor: "",
-          times: ""
-        }
-      ]
-    };
+          coverImage: '',
+          title: '',
+          content: '',
+          tag: '',
+          autor: '',
+          times: '',
+        },
+      ],
+    }
   },
   computed: {},
   watch: {
@@ -82,19 +76,19 @@ export default {
       handler() {
         if (this.$route.query.type) {
           //点击非首页导航
-          this.isBanner = false;
-          this.isAdTipRow = false;
-          this.adTip = this.$route.query.type;
-           this.getArticle(this.$route.query.type)
-        }else{
-           this.isBanner = true;
-          this.isAdTipRow = true;
-          this.adTip = "all"
-          this.getArticle("all")
+          this.isBanner = false
+          this.isAdTipRow = false
+          this.adTip = this.$route.query.type
+          this.getArticle(this.$route.query.type)
+        } else {
+          this.isBanner = true
+          this.isAdTipRow = true
+          this.adTip = 'all'
+          this.getArticle('all')
         }
       },
-      deep:true
-    }
+      deep: true,
+    },
   },
   methods: {
     getArticle(flag) {
@@ -104,75 +98,65 @@ export default {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
-            userName: "longwei",
-            flag: flag //all表示所有文章
-          }
+            userName: 'longwei',
+            flag: flag, //all表示所有文章
+          },
         })
-        .then(res => {
+        .then((res) => {
           //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
-          res.data.resulet.length > 0
-            ? (this.showTips = false)
-            : (this.showTips = true);
-          this.articleObj = res.data.resulet;
-          console.log(this.articleObj, "打印文章数据");
+          res.data.resulet.length > 0 ? (this.showTips = false) : (this.showTips = true)
+          this.articleObj = res.data.resulet
+          console.log(this.articleObj, '打印文章数据')
         })
-        .catch(err => {
-          console.log("err", err);
-        });
+        .catch((err) => {
+          console.log('err', err)
+        })
     },
     // 进入文章详情
     gotoContent(item, index) {
       //拼装上一页，下一页数据
-      let nextidIndex = this.articleObj[index - 1]
-        ? this.articleObj[index - 1].idIndex
-        : -1;
-      let nextname = this.articleObj[index - 1]
-        ? this.articleObj[index - 1].title
-        : -1;
-      let preidIndex = this.articleObj[index + 1]
-        ? this.articleObj[index + 1].idIndex
-        : -1;
-      let prename = this.articleObj[index + 1]
-        ? this.articleObj[index + 1].title
-        : -1;
+      let nextidIndex = this.articleObj[index - 1] ? this.articleObj[index - 1].idIndex : -1
+      let nextname = this.articleObj[index - 1] ? this.articleObj[index - 1].title : -1
+      let preidIndex = this.articleObj[index + 1] ? this.articleObj[index + 1].idIndex : -1
+      let prename = this.articleObj[index + 1] ? this.articleObj[index + 1].title : -1
       let nextPre = {
         nextidIndex: nextidIndex,
         nextname: nextname,
         preidIndex: preidIndex,
-        prename: prename
-      };
+        prename: prename,
+      }
       this.$router.push({
-        path: "/articleContent",
+        path: '/articleContent',
         query: {
           // vue路由传对象刷新会报错，数据丢失，用json字符串解决
           // articleObj:encodeURIComponent(JSON.stringify(item)),
           idIndex: this.articleObj[index].idIndex,
           types: this.articleObj[index].types,
 
-          nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
-        }
-      });
-    }
+          nextPre: encodeURIComponent(JSON.stringify(nextPre)), //上一页下一页数据
+        },
+      })
+    },
   },
   mounted() {
-        if (this.$route.query.type) {
-          //点击非首页导航
-          this.isBanner = false;
-          this.isAdTipRow = false;
-          this.adTip = this.$route.query.type;
-           this.getArticle(this.$route.query.type)
-        }else{
-           this.isBanner = true;
-          this.isAdTipRow = true;
-          this.adTip = "all"
-          this.getArticle("all")
-        }
+    if (this.$route.query.type) {
+      //点击非首页导航
+      this.isBanner = false
+      this.isAdTipRow = false
+      this.adTip = this.$route.query.type
+      this.getArticle(this.$route.query.type)
+    } else {
+      this.isBanner = true
+      this.isAdTipRow = true
+      this.adTip = 'all'
+      this.getArticle('all')
+    }
     // this.getArticle("all");
     // Bus.$on("getTypes", data => {
     //   this.getArticle(data);
     // });
-  }
-};
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -265,7 +249,7 @@ export default {
       }
       .bg-danger {
         background-color: #fa5252 !important;
-       
+
       }
       .float-left {
         float: left !important;

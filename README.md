@@ -1,39 +1,9 @@
-# vue-ad
+[在线预览](https://woai3c.github.io/github-actions-demo)
 
-> A Vue.js project
+使用的 action 库 [github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action)
 
-## Build Setup
+这个 action 的作用是：
+1. 当这个库执行 push 操作时，github 会自动执行 action 中的动作，即打包操作。
+2. 将打包后的文件推送到我的 github page。
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8082
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
-```
-
-``` bash
-背景颜色：
-灰色：#f5f7f9
-左侧工具栏绿色：#11a480 
-中间绿色背景：#00c091
-
-字体颜色：
-二级灰色标题：    color: #525867;
-正文：color:#a4aab9;
-
-        
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+这样就不用每次打包后，手动替换 github page 中的页面了。

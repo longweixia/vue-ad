@@ -39,8 +39,8 @@
   </div>
 </template>
 <script>
-import Swiper from "swiper";
-import "swiper/dist/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/dist/css/swiper.min.css";
 import Bus from "@/assets/event-bus.js";
 // 由于进入Template3或者Template4时都会调用getTemplatesResume接口，而这个
 // 接口需要传TemplateId值为路由的id，当在Template3页面引入这两个模板时，路由id为3
@@ -104,21 +104,21 @@ export default {
     // },
   },
   mounted() {
-    var mySwiper = new Swiper(".swiper-container", {
-      //   autoplay: true,
-      //   delay: 2000, //2秒切换一次
-      //   loop: true,
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination",
-        scrollbar: ".swiper-scrollbar",
-        // 如果需要分页器
-        pagination: ".swiper-pagination",
-        // 如果需要前进后退按钮
-        nextButton: ".swiper-button-next",
-        prevButton: ".swiper-button-prev"
-      }
-    });
+    // var mySwiper = new Swiper(".swiper-container", {
+    //   //   autoplay: true,
+    //   //   delay: 2000, //2秒切换一次
+    //   //   loop: true,
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination",
+    //     scrollbar: ".swiper-scrollbar",
+    //     // 如果需要分页器
+    //     pagination: ".swiper-pagination",
+    //     // 如果需要前进后退按钮
+    //     nextButton: ".swiper-button-next",
+    //     prevButton: ".swiper-button-prev"
+    //   }
+    // });
   }
 };
 </script>

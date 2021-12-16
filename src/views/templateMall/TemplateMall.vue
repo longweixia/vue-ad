@@ -142,8 +142,8 @@
 <script>
 import NavHeader from "@/components/NavHeader";
 import NavFooter from "@/components/NavFooter";
-import Swiper from "swiper";
-import "swiper/dist/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/dist/css/swiper.min.css";
 // import GroupChart from "@/views/GroupChart/GroupChart";
 export default {
   name: "TemplateMall",
@@ -321,15 +321,15 @@ export default {
   },
   mounted() {
     this.getImgList();
-    var mySwiper = new Swiper(".swiper-container", {
-      autoplay: true,
-      delay: 2000, //2秒切换一次
-      loop: true,
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination"
-      }
-    });
+    // var mySwiper = new Swiper(".swiper-container", {
+    //   autoplay: true,
+    //   delay: 2000, //2秒切换一次
+    //   loop: true,
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination"
+    //   }
+    // });
   }
 };
 </script>

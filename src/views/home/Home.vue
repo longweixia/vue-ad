@@ -326,8 +326,8 @@ import NavFooter from "@/components/NavFooter";
 import ResumeTemplate1 from "@/views/resume/ResumeTemplate/ResumeTemplate1";
 import ResumeTemplate2 from "@/views/resume/ResumeTemplate/ResumeTemplate2";
 import Chart from "./Chart";
-import Swiper from "swiper";
-import "swiper/dist/css/swiper.min.css";
+// import Swiper from "swiper";
+// import "swiper/dist/css/swiper.min.css";
 // import GroupChart from "@/views/GroupChart/GroupChart";
 export default {
   name: "Home",
@@ -480,15 +480,15 @@ export default {
   },
   mounted() {
     this.getImgList();
-    var mySwiper = new Swiper(".swiper-container", {
-      autoplay: true,
-      delay: 2000, //2秒切换一次
-      loop: true,
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination"
-      }
-    });
+    // var mySwiper = new Swiper(".swiper-container", {
+    //   autoplay: true,
+    //   delay: 2000, //2秒切换一次
+    //   loop: true,
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination"
+    //   }
+    // });
   }
 };
 </script>

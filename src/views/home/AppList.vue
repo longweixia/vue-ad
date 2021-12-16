@@ -1,48 +1,39 @@
 <template>
   <div class="content-article">
     <div slot="article">
-      <div v-if="showTips" class="ad-tips content-left">
-        该分类下暂无数据，您可以查看其它分类
-      </div>
+      <div v-if="showTips" class="ad-tips content-left">该分类下暂无数据，您可以查看其它分类</div>
       <div v-if="!showTips" class="ad-content-left">
         <div>
-          <div
-            class="content-box"
-            v-for="(item, index) in appArry"
-            :key="index"
-          >
+          <div class="content-box" v-for="(item, index) in appArry" :key="index">
             <div class="article-left">
-              <a @click="gotoContent(item, index)" class="page-img"
-                ><img :src="item.coverImage" alt="内容无法展示..."
-              /></a>
+              <a @click="gotoContent(item, index)" class="page-img">
+                <img :src="item.coverImage" alt="内容无法展示..." />
+              </a>
             </div>
             <div class="article-right">
               <div class="article-text">
                 <div class="article-title">
                   <a @click="gotoContent(item, index)">{{ item.name }}</a>
                   <Rate disabled v-model="item.rate" />
-                  <Button @click="gotoContent(item, index)"
+                  <Button
+                    @click="gotoContent(item, index)"
                     class="btn-downLoad"
                     size="small"
                     icon="ios-download-outline"
                     type="primary"
-                    >下载</Button
                   >
+                    下载
+                  </Button>
                 </div>
                 <div class="list-text">
-                  <div
-                    class="content-page"
-               
-                  >{{item.introduce}}</div>
+                  <div class="content-page">{{ item.introduce }}</div>
                 </div>
                 <div class="list-meta">
                   <i class="page-top bg-danger">{{ item.tag }}</i>
-                  <span class="float-left mr-small">{{ item.autor }}</span
-                  >{{ item.times | formatDateDay }}
+                  <span class="float-left mr-small">{{ item.autor }}</span>
+                  {{ item.times | formatDateDay }}
                   <span class="system-app">支持系统：{{ item.system }}</span>
-                  <span class="system-app"
-                    >下载次数：{{ item.downLoadNum }}</span
-                  >
+                  <span class="system-app">下载次数：{{ item.downLoadNum }}</span>
                 </div>
               </div>
             </div>
@@ -54,14 +45,14 @@
 </template>
 
 <script>
-import Home1 from "./Home1";
-import VueMarkdown from "vue-markdown";
-import Bus from "@/assets/event-bus.js";
+import Home1 from './Home1'
+// import VueMarkdown from "vue-markdown";
+import Bus from '@/assets/event-bus.js'
 export default {
-  name: "AppList",
+  name: 'AppList',
 
-  props: ["appArry"],
-  components: { VueMarkdown, Home1 },
+  props: ['appArry'],
+  components: { Home1 },
   data() {
     return {
       articleList: [],
@@ -70,19 +61,18 @@ export default {
       articleIndex: 0,
       articleObj: [
         {
-          coverImage: "http://47.103.40.123:3001/images/coverImg/timg.jpg",
-          title: "松鼠网",
-          content:
-            "阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛。",
-          tag: "顶",
+          coverImage: 'http://47.103.40.123:3001/images/coverImg/timg.jpg',
+          title: '松鼠网',
+          content: '阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛阅读单价8毛。',
+          tag: '顶',
           rateNum: 5,
-          system: "安卓苹果",
-          autor: "轻赚网",
-          times: "2019/09/20",
-          downLoadNum: 365
-        }
-      ]
-    };
+          system: '安卓苹果',
+          autor: '轻赚网',
+          times: '2019/09/20',
+          downLoadNum: 365,
+        },
+      ],
+    }
   },
   computed: {},
   methods: {
@@ -93,21 +83,19 @@ export default {
           params: {
             // pageSize: this.pageSize,
             // currentPage:this.currentPage,
-            userName: "longwei",
-            flag: flag //all表示所有文章
-          }
+            userName: 'longwei',
+            flag: flag, //all表示所有文章
+          },
         })
-        .then(res => {
+        .then((res) => {
           //一开始要查所有数据的长度，用来传给文章底部的上一篇下一篇时，判断当前文章是不是最后一篇
-          res.data.resulet.length > 0
-            ? (this.showTips = false)
-            : (this.showTips = true);
+          res.data.resulet.length > 0 ? (this.showTips = false) : (this.showTips = true)
           // this.articleObj = res.data.resulet;
-          console.log(this.articleObj, "打印文章数据");
+          console.log(this.articleObj, '打印文章数据')
         })
-        .catch(err => {
-          console.log("err", err);
-        });
+        .catch((err) => {
+          console.log('err', err)
+        })
     },
     // 进入文章详情
     gotoContent(item, index) {
@@ -131,28 +119,28 @@ export default {
       //   prename: prename
       // };
       this.$router.push({
-        path: "/appDetail",
+        path: '/appDetail',
         query: {
-          types1:item.types1,
-          types2:item.types2,
-          id:item.id,
+          types1: item.types1,
+          types2: item.types2,
+          id: item.id,
           // // vue路由传对象刷新会报错，数据丢失，用json字符串解决
           // // articleObj:encodeURIComponent(JSON.stringify(item)),
           // idIndex: this.articleObj[index].idIndex,
           // types: this.articleObj[index].types,
 
           // nextPre: encodeURIComponent(JSON.stringify(nextPre)) //上一页下一页数据
-        }
-      });
-    }
+        },
+      })
+    },
   },
   created() {
     // this.getArticle("all");
     // Bus.$on("getTypes", data => {
     //   this.getArticle(data);
     // });
-  }
-};
+  },
+}
 </script>
 
 <style lang="less" scoped>

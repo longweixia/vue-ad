@@ -1,11 +1,7 @@
 <template>
   <div class="layout">
     <Home1 :isBanner="false" :isAdTipRow="false" adTip="content">
-      <Content
-        slot="articleContent"
-        :style="{ minHeight: '220px' }"
-        class="ad-content"
-      >
+      <Content slot="articleContent" :style="{ minHeight: '220px' }" class="ad-content">
         <div class="ad-content-div">
           <div class="ad-content-left">
             <div class="content-box">
@@ -23,7 +19,7 @@
                 class="content-page"
                 v-html="articleObj.content"
               ></div> -->
-              <mavon-editor
+              <!-- <mavon-editor
                 class="content-page"
                 :value="articleObj.content"
                 :subfield="false"
@@ -32,28 +28,28 @@
                 :editable="false"
                 :scrollStyle="false"
                 :ishljs="true"
-              ></mavon-editor>
+              ></mavon-editor> -->
 
               <div class="mb-default clearfix">
-                <a
-                  class="float-left btn btn-outline-default mr-small"
-                  
-                  >{{bigType | bigTypes}}</a
-                >
+                <a class="float-left btn btn-outline-default mr-small">{{ bigType | bigTypes }}</a>
               </div>
               <!-- 文章底部 上一篇，下一篇 -->
               <div class="log-neighbor clearfix">
-                <a v-if="nextPre.nextidIndex > -1" @click="gotoContent()"
-                  ><span>上一篇：</span>{{ nextPre.nextname }}</a
-                ><a v-if="nextPre.preidIndex !== -1" @click="gotoContent()"
-                  ><span>下一篇：</span>{{ nextPre.prename }}</a
-                >
+                <a v-if="nextPre.nextidIndex > -1" @click="gotoContent()">
+                  <span>上一篇：</span>
+                  {{ nextPre.nextname }}
+                </a>
+                <a v-if="nextPre.preidIndex !== -1" @click="gotoContent()">
+                  <span>下一篇：</span>
+                  {{ nextPre.prename }}
+                </a>
               </div>
               <div class="log-readmore">
                 <h5 class="page-header">继续阅读</h5>
                 <ul>
                   <li v-for="(item, index) in keepList" :key="index">
-                    <span class="page-dot"></span><a>{{ item.title }}</a>
+                    <span class="page-dot"></span>
+                    <a>{{ item.title }}</a>
                   </li>
                 </ul>
               </div>
@@ -72,34 +68,33 @@
 </template>
 
 <script>
-import Home1 from "./Home1";
+import Home1 from './Home1'
 // import ArticleBottom from "./ArticleBottom";
-import Comment from "./Comment";
-import VueMarkdown from "vue-markdown";
-import Bus from "@/assets/event-bus.js";
+import Comment from './Comment'
+// import VueMarkdown from "vue-markdown";
+import Bus from '@/assets/event-bus.js'
 export default {
-  name: "ArticleContent",
+  name: 'ArticleContent',
   components: {
     Home1,
     // ArticleBottom,
 
-    VueMarkdown,
-    Comment
+    Comment,
   },
   data() {
     return {
-      bigType:"",
+      bigType: '',
       articleObj: {},
       random: [],
-      articleIndex: "",
+      articleIndex: '',
       keepList: [],
-      nextPre: {} //上一页，下一篇数据
-    };
+      nextPre: {}, //上一页，下一篇数据
+    }
   },
   computed: {
-    menuitemClasses: function() {
-      return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
-    }
+    menuitemClasses: function () {
+      return ['menu-item', this.isCollapsed ? 'collapsed-menu' : '']
+    },
   },
   methods: {
     // 继续阅读
@@ -107,61 +102,61 @@ export default {
       this.axios
         .get(`${this.baseUrl}/articles/getKeep`, {
           params: {
-            userName: "longwei",
-            flag: types
-          }
+            userName: 'longwei',
+            flag: types,
+          },
         })
-        .then(res => {
-          this.keepList = res.data.resulet;
+        .then((res) => {
+          this.keepList = res.data.resulet
         })
-        .catch(err => {
-          console.log("err", err);
-        });
+        .catch((err) => {
+          console.log('err', err)
+        })
     },
     getArticle(types, idIndex) {
       this.axios
         .get(`${this.baseUrl}/articles/get`, {
           params: {
-            userName: "longwei",
+            userName: 'longwei',
             flag: types, //all表示所有文章
-            idIndex: idIndex
-          }
+            idIndex: idIndex,
+          },
         })
-        .then(res => {
-          this.articleObj = res.data.resulet;
-          Bus.$emit("postArticleList", this.articleObj);
+        .then((res) => {
+          this.articleObj = res.data.resulet
+          Bus.$emit('postArticleList', this.articleObj)
 
-          this.articleObj.Pageview = res.data.resulet.Pageview + 1;
-          this.submit();
+          this.articleObj.Pageview = res.data.resulet.Pageview + 1
+          this.submit()
         })
-        .catch(err => {
-          console.log("err", err);
-        });
+        .catch((err) => {
+          console.log('err', err)
+        })
     },
     // 增加阅读量
     submit() {
       // 如果id存在就是修改，如果id不存在就是新增
       // 拼装article数据
-      let article = {};
-      article[this.articleObj.types] = [this.articleObj];
-      article[this.articleObj.types];
+      let article = {}
+      article[this.articleObj.types] = [this.articleObj]
+      article[this.articleObj.types]
 
       this.axios
         .post(`${this.baseUrl}/articles/post`, {
           data: {
-            userName: "longwei",
+            userName: 'longwei',
             types: this.articleObj.types,
             id: this.articleObj.id,
-            article: article
-          }
+            article: article,
+          },
         })
-        .then(res => {
-          if (res.data.status == "0") {
+        .then((res) => {
+          if (res.data.status == '0') {
           } else {
           }
         })
-        .catch(err => {});
-    }
+        .catch((err) => {})
+    },
   },
   mounted() {
     // Bus.$emit('hiddenBanner')
@@ -170,11 +165,11 @@ export default {
     this.getArticle(
       this.$route.query.types, //大类
       Number(this.$route.query.idIndex) //id标志
-    );
-    this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre));
-    this.getArticleKeep("tb", "tb1");
-  }
-};
+    )
+    this.nextPre = JSON.parse(decodeURIComponent(this.$route.query.nextPre))
+    this.getArticleKeep('tb', 'tb1')
+  },
+}
 </script>
 
 <style lang="less" scoped>
