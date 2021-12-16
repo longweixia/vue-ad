@@ -1,6 +1,7 @@
 {
   "name": "vue-zhimi",
   "version": "1.0.0",
+  "homepage": "./",
   "description": "A Vue.js project",
   "author": "longwei <1175978196@qq.com>",
   "private": true,
